@@ -1,4 +1,11 @@
+#### To utilize this repository for yourself...
+Change the `BASE_URL` to your MinIO Blog author page's URL.
+
+---
+
 # David Cannan's MinIO Publications
+
+[![Update Articles](https://github.com/Cdaprod/david-cannan-minio-blogs/actions/workflows/update-articles.yml/badge.svg)](https://github.com/Cdaprod/david-cannan-minio-blogs/actions/workflows/update-articles.yml)
 
 | Title | Author | Summary | Date | Link |
 |-------|--------|---------|------|------|
