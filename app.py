@@ -22,37 +22,40 @@ def fetch_and_parse_articles():
         article_link = article.select_one('a[href]')
         link = 'https://blog.min.io' + article_link['href'] if article_link else 'URL not available'
         articles.append((title, AUTHOR, summary, date, link))
-    
+
     return pd.DataFrame(articles, columns=['title', 'author', 'summary', 'date', 'url'])
 
 def sanitize_title(title):
-    # Use a separate function to sanitize the title
     return re.sub(r'[^\w\-]', '_', title)[:250]
 
 def update_readme_and_store_articles(articles_df):
     if not os.path.exists('articles'):
         os.makedirs('articles')
 
+    # Attempt to load the existing README.md content
     try:
-        existing_articles_df = pd.read_csv('README.md', sep='|', skiprows=2, names=['title', 'author', 'summary', 'date', 'url'])
+        existing_articles_df = pd.read_csv('README.md', sep='|', skiprows=2, names=['title', 'author', 'summary', 'date', 'url'], engine='python')
     except FileNotFoundError:
         existing_articles_df = pd.DataFrame(columns=['title', 'author', 'summary', 'date', 'url'])
-
+    
+    # Determine which articles are new
     new_articles = pd.concat([articles_df, existing_articles_df]).drop_duplicates(subset=['title'], keep=False)
     
     if not new_articles.empty:
-        with open('README.md', 'a') as f:  # Append new articles to README.md
-            for _, row in new_articles.iterrows():
+        # Rewrite README.md to include both old and new articles
+        with open('README.md', 'w') as f:
+            f.write("# David Cannan's MinIO Publications\n")
+            for _, row in pd.concat([existing_articles_df, new_articles])[['title', 'author', 'summary', 'date', 'url']].iterrows():
                 f.write(f"| {row['title']} | {row['author']} | {row['summary']} | {row['date']} | [Link]({row['url']}) |\n")
-                
-                # Store article content in the /articles/ directory
-                response = requests.get(row['url'])
-                article_content = BeautifulSoup(response.content, 'html.parser').get_text()
-                sanitized_title = sanitize_title(row['title'])
-                filename = f"{sanitized_title}.md"
-                with open(f'articles/{filename}', 'w') as article_file:
-                    article_file.write(f"# {row['title']}\n\n{article_content}\n")
-        
+
+        for _, row in new_articles.iterrows():
+            response = requests.get(row['url'])
+            article_content = BeautifulSoup(response.content, 'html.parser').select_one('article').get_text(separator="\n", strip=True) if BeautifulSoup(response.content, 'html.parser').select_one('article') else 'Content not found'
+            sanitized_title = sanitize_title(row['title'])
+            filename = f"{sanitized_title}.md"
+            with open(f'articles/{filename}', 'w') as article_file:
+                article_file.write(f"# {row['title']}\n\n{article_content}\n")
+
         print(f"Added {len(new_articles)} new articles to README.md and /articles/ directory.")
     else:
         print("No new articles found.")
