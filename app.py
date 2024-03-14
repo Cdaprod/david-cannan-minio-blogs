@@ -5,44 +5,6 @@ from datetime import datetime
 import pytz
 import os
 
-# def fetch_and_parse_articles():
-#     url = 'https://blog.min.io/author/david-cannan'
-#     response = requests.get(url)
-#     soup = BeautifulSoup(response.text, 'html.parser')
-
-#     articles = []
-#     for article in soup.select('article.post-card'):
-#         title = article.find('h2').text.strip()
-#         author = 'David Cannan'
-#         summary = article.select_one('div.post__content > p').text.strip() if article.select_one('div.post__content > p') else ''
-#         date = article.find('time').text.strip() if article.find('time') else ''
-        
-#         title_link = article.find('h2').find('a')
-#         link = title_link['href'] if title_link else ''
-        
-#         articles.append((title, author, summary, date, link))
-
-#     return pd.DataFrame(articles, columns=['title', 'author', 'summary', 'date', 'url'])
-
-# def fetch_and_parse_articles():
-#     url = 'https://blog.min.io/author/david-cannan'
-#     response = requests.get(url)
-#     soup = BeautifulSoup(response.text, 'html.parser')
-
-#     articles = []
-#     for article in soup.select('article.post-card'):
-#         title = article.find('h2').text.strip()
-#         author = 'David Cannan'
-#         summary = article.select_one('div.post__content > p').text.strip() if article.select_one('div.post__content > p') else ''
-#         date = article.find('time').text.strip() if article.find('time') else ''
-        
-#         article_link = article.select_one('a.post__more')
-#         link = article_link['href'] if article_link else ''
-        
-#         articles.append((title, author, summary, date, link))
-
-#     return pd.DataFrame(articles, columns=['title', 'author', 'summary', 'date', 'url'])
-
 def fetch_and_parse_articles():
     url = 'https://blog.min.io/author/david-cannan'
     response = requests.get(url)
