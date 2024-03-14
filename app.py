@@ -25,6 +25,10 @@ def fetch_and_parse_articles():
     
     return pd.DataFrame(articles, columns=['title', 'author', 'summary', 'date', 'url'])
 
+def sanitize_title(title):
+    # Use a separate function to sanitize the title
+    return re.sub(r'[^\w\-]', '_', title)[:250]
+
 def update_readme_and_store_articles(articles_df):
     if not os.path.exists('articles'):
         os.makedirs('articles')
@@ -44,7 +48,8 @@ def update_readme_and_store_articles(articles_df):
                 # Store article content in the /articles/ directory
                 response = requests.get(row['url'])
                 article_content = BeautifulSoup(response.content, 'html.parser').get_text()
-                filename = f"{re.sub(r'[^\\w\\-]', '_', row['title'])[:250]}.md"
+                sanitized_title = sanitize_title(row['title'])
+                filename = f"{sanitized_title}.md"
                 with open(f'articles/{filename}', 'w') as article_file:
                     article_file.write(f"# {row['title']}\n\n{article_content}\n")
         
