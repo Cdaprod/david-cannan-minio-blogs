@@ -55,8 +55,8 @@ def fetch_and_parse_articles():
         summary = article.select_one('div.post__content > p').text.strip() if article.select_one('div.post__content > p') else ''
         date = article.find('time').text.strip() if article.find('time') else ''
         
-        article_link = article.select_one('a.post__img')
-        link = article_link['href'] if article_link else ''
+        article_link = article.select_one('a.post__more')
+        link = 'https://blog.min.io' + article_link['href'] if article_link else ''
         
         articles.append((title, author, summary, date, link))
 
