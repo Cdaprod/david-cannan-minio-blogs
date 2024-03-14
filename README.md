@@ -1,7 +1,5 @@
 # David Cannan's MinIO Publications
 
-[![Update Articles](https://github.com/Cdaprod/david-cannan-minio-blogs/actions/workflows/update-articles.yml/badge.svg)](https://github.com/Cdaprod/david-cannan-minio-blogs/actions/workflows/update-articles.yml)
-
 | Title | Author | Summary | Date | Link |
 |-------|--------|---------|------|------|
 | Deploying MinIO with GitOps on Self-Hosted Infrastructure | David Cannan | This article unveils the synergy between MinIO and GitOps, utilizing self-hosted GitHub Actions to redefine CI/CD workflows. It emphasizes streamlined data management, security, and the efficiency of deploying scalable software.
