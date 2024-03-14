@@ -23,8 +23,8 @@ WEAVIATE_ENDPOINT = "http://localhost:8080"
 BUCKET_NAME = "cda-datasets"
 
 # Initialize Minio and Weaviate clients
-minio_client = Minio(MINIO_ENDPOINT, access_key=MINIO_ACCESS_KEY, secret_key=MINIO_SECRET_KEY, secure=True)
-weaviate_client = weaviate.Client(url=WEAVIATE_ENDPOINT, timeout_config=(5, 15))
+#minio_client = Minio(MINIO_ENDPOINT, access_key=MINIO_ACCESS_KEY, secret_key=MINIO_SECRET_KEY, secure=True)
+#weaviate_client = weaviate.Client(url=WEAVIATE_ENDPOINT, timeout_config=(5, 15))
 
 def fetch_and_parse_articles():
     response = requests.get(BLOG_URL)
