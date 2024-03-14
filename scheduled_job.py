@@ -5,10 +5,12 @@ from datetime import datetime
 import pytz
 import os
 import re
+import time
 
 # Constants
 AUTHOR = 'David Cannan'
 BLOG_URL = 'https://blog.min.io/author/david-cannan'
+UPDATE_INTERVAL = 86400  # 24 hours in seconds
 
 def fetch_and_parse_articles():
     response = requests.get(BLOG_URL)
@@ -32,43 +34,39 @@ def update_readme_and_store_articles(articles_df):
     if not os.path.exists('articles'):
         os.makedirs('articles')
 
-    # Attempt to load the existing README.md content
     try:
-        with open('README.md', 'r') as f:
-            existing_content = f.read()
+        existing_articles_df = pd.read_csv('README.md', sep='|', skiprows=2, names=['title', 'author', 'summary', 'date', 'url'], engine='python')
     except FileNotFoundError:
-        existing_content = ""
-
-    # Convert existing README content to a DataFrame for easier comparison
-    existing_urls = set(re.findall(r'\[Link\]\((.*?)\)', existing_content))
+        existing_articles_df = pd.DataFrame(columns=['title', 'author', 'summary', 'date', 'url'])
     
-    # Filter new articles by checking if URL is not in existing URLs
-    new_articles = articles_df[~articles_df['url'].isin(existing_urls)]
-
+    new_articles = pd.concat([articles_df, existing_articles_df]).drop_duplicates(subset=['title'], keep=False)
+    
     if not new_articles.empty:
-        # Append new articles to the README.md file
-        with open('README.md', 'a') as f:
-            for _, row in new_articles.iterrows():
+        with open('README.md', 'w') as f:
+            f.write("# David Cannan's MinIO Publications\n")
+            for _, row in pd.concat([existing_articles_df, new_articles])[['title', 'author', 'summary', 'date', 'url']].iterrows():
                 f.write(f"| {row['title']} | {row['author']} | {row['summary']} | {row['date']} | [Link]({row['url']}) |\n")
 
-        # Save individual article content to /articles directory
         for _, row in new_articles.iterrows():
             response = requests.get(row['url'])
             article_content = BeautifulSoup(response.content, 'html.parser').select_one('article').get_text(separator="\n", strip=True) if BeautifulSoup(response.content, 'html.parser').select_one('article') else 'Content not found'
             sanitized_title = sanitize_title(row['title'])
-            filename = f"articles/{sanitized_title}.md"
-            
-            # Check if file already exists to avoid duplicates
-            if not os.path.exists(filename):
-                with open(filename, 'w') as article_file:
-                    article_file.write(f"# {row['title']}\n\n{article_content}\n")
+            filename = f"{sanitized_title}.md"
+            with open(f'articles/{filename}', 'w') as article_file:
+                article_file.write(f"# {row['title']}\n\n{article_content}\n")
 
         print(f"Added {len(new_articles)} new articles to README.md and /articles/ directory.")
     else:
         print("No new articles found.")
 
+def run_update_job():
+    while True:
+        est = pytz.timezone('US/Eastern')
+        print(f"Running update job at {datetime.now(est)} EST")
+        articles_df = fetch_and_parse_articles()
+        update_readme_and_store_articles(articles_df)
+        print(f"Next update in 24 hours.")
+        time.sleep(UPDATE_INTERVAL)
+
 if __name__ == "__main__":
-    est = pytz.timezone('US/Eastern')
-    print(f"Running update job at {datetime.now(est)} EST")
-    articles_df = fetch_and_parse_articles()
-    update_readme_and_store_articles(articles_df)
+    run_update_job()
