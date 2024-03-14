@@ -24,6 +24,25 @@ import os
 
 #     return pd.DataFrame(articles, columns=['title', 'author', 'summary', 'date', 'url'])
 
+# def fetch_and_parse_articles():
+#     url = 'https://blog.min.io/author/david-cannan'
+#     response = requests.get(url)
+#     soup = BeautifulSoup(response.text, 'html.parser')
+
+#     articles = []
+#     for article in soup.select('article.post-card'):
+#         title = article.find('h2').text.strip()
+#         author = 'David Cannan'
+#         summary = article.select_one('div.post__content > p').text.strip() if article.select_one('div.post__content > p') else ''
+#         date = article.find('time').text.strip() if article.find('time') else ''
+        
+#         article_link = article.select_one('a.post__more')
+#         link = article_link['href'] if article_link else ''
+        
+#         articles.append((title, author, summary, date, link))
+
+#     return pd.DataFrame(articles, columns=['title', 'author', 'summary', 'date', 'url'])
+
 def fetch_and_parse_articles():
     url = 'https://blog.min.io/author/david-cannan'
     response = requests.get(url)
@@ -43,14 +62,40 @@ def fetch_and_parse_articles():
 
     return pd.DataFrame(articles, columns=['title', 'author', 'summary', 'date', 'url'])
 
+# def extract_article_content(url):
+#     try:
+#         response = requests.get(url)
+#         response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
+#         soup = BeautifulSoup(response.text, 'html.parser')
+#         article_content = soup.find('section', class_='post-full-content')
+        
+#         if article_content:
+#             return article_content.get_text(separator='\n', strip=True)
+#         else:
+#             print(f"Article content not found for: {url}")
+#             return None
+#     except requests.exceptions.RequestException as e:
+#         print(f"Error fetching article content: {url}")
+#         print(f"Error details: {str(e)}")
+#         return None
+
 def extract_article_content(url):
+    if not url:
+        print("Empty URL. Skipping article content extraction.")
+        return None
+    
     try:
         response = requests.get(url)
         response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
         soup = BeautifulSoup(response.text, 'html.parser')
-        article_content = soup.find('section', class_='post-full-content')
+        article_content = soup.select_one('section.post__content')
         
         if article_content:
+            # Remove navigation elements
+            nav_elements = article_content.select('div.post__nav')
+            for nav in nav_elements:
+                nav.decompose()
+            
             return article_content.get_text(separator='\n', strip=True)
         else:
             print(f"Article content not found for: {url}")
