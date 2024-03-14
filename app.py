@@ -5,6 +5,7 @@ from datetime import datetime
 import pytz
 import os
 
+
 def fetch_and_parse_articles():
     url = 'https://blog.min.io/author/david-cannan'
     response = requests.get(url)
