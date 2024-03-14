@@ -24,18 +24,25 @@ def fetch_and_parse_articles():
 def extract_article_content(url):
     base_url = 'https://blog.min.io'
     full_url = base_url + url
-    response = requests.get(full_url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    article_content = soup.find('section', class_='post-full-content')
-    
-    if article_content:
-        return article_content.get_text(separator='\n', strip=True)
-    else:
+    try:
+        response = requests.get(full_url)
+        response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
+        soup = BeautifulSoup(response.text, 'html.parser')
+        article_content = soup.find('section', class_='post-full-content')
+        
+        if article_content:
+            return article_content.get_text(separator='\n', strip=True)
+        else:
+            print(f"Article content not found for: {full_url}")
+            return None
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching article content: {full_url}")
+        print(f"Error details: {str(e)}")
         return None
 
 def update_articles_md(new_articles_df):
     try:
-        existing_articles_df = pd.read_csv('articles.md', sep='|', skiprows=1, names=['title', 'author', 'summary', 'date', 'url'])
+        existing_articles_df = pd.read_csv('README.md', sep='|', skiprows=1, names=['title', 'author', 'summary', 'date', 'url'])
     except FileNotFoundError:
         existing_articles_df = pd.DataFrame(columns=['title', 'author', 'summary', 'date', 'url'])
 
@@ -45,13 +52,13 @@ def update_articles_md(new_articles_df):
     if not new_entries.empty:
         new_entries = new_entries.reindex(columns=['title', 'author', 'summary', 'date', 'url'], fill_value='')
 
-        with open('articles.md', 'w') as f:
+        with open('README.md', 'w') as f:
             f.write("| Title | Author | Summary | Date | URL |\n")
-            f.write("| ----- | ------ | ------- | ---- | --- |\n")
+            f.write("|-------|--------|---------|------|-----|\n")
             existing_articles_df.to_csv(f, sep='|', index=False, header=False)
             new_entries.to_csv(f, sep='|', index=False, header=False)
 
-        print(f"Added {len(new_entries)} new articles to articles.md")
+        print(f"Added {len(new_entries)} new articles to README.md")
         
         if not os.path.exists('articles'):
             os.makedirs('articles')

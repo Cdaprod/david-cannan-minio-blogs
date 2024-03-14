@@ -1,6 +1,7 @@
 name: Update Articles
 
 on:
+  push:
   workflow_dispatch:
   schedule:
     - cron: '0 13 * * 5'  # Run every Friday at 9 AM EST (13:00 UTC)
