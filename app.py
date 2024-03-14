@@ -11,19 +11,20 @@ def fetch_and_parse_articles():
     soup = BeautifulSoup(response.text, 'html.parser')
 
     articles = []
-    for article in soup.find_all('article'):
+    for article in soup.select('article.post-card'):
         title = article.find('h2').text.strip()
-        summary = article.find('p', class_='excerpt').text.strip()
+        summary = article.select_one('div.post__content > p').text.strip()
         date = article.find('time').text.strip()
-        link = article.find('a', class_='article-link')['href']
+        link = article.find('a', class_='post__more')['href']
         articles.append((title, 'David Cannan', summary, date, link))
 
     return pd.DataFrame(articles, columns=['title', 'author', 'summary', 'date', 'url'])
 
 def extract_article_content(url):
-    response = requests.get(url)
+    base_url = 'https://blog.min.io'
+    response = requests.get(base_url + url)
     soup = BeautifulSoup(response.text, 'html.parser')
-    article_content = soup.find('div', class_='article-content')
+    article_content = soup.find('section', class_='post-full-content')
     
     if article_content:
         return article_content.get_text(separator='\n', strip=True)
