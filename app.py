@@ -27,6 +27,11 @@ def fetch_and_parse_articles():
 def sanitize_title(title):
     return re.sub(r'[^\w\-]', '_', title)[:250]
 
+def ensure_absolute_url(url):
+    if url.startswith('http'):
+        return url
+    return 'https://blog.min.io' + url
+
 def update_readme_and_articles(articles_df):
     if not os.path.exists('articles'):
         os.makedirs('articles')
@@ -44,11 +49,12 @@ def update_readme_and_articles(articles_df):
         f.write("| Title | Author | Summary | Date | Link |\n")
         f.write("|-------|--------|---------|------|------|\n")
         for index, row in articles_df.iterrows():
-            f.write(f"| {row['title']} | {row['author']} | {row['summary']} | {row['date']} | [Link]({row['url']}) |\n")
+            f.write(f"| {row['title']} | {row['author']} | {row['summary']} | {row['date']} | [Link]({ensure_absolute_url(row['url'])}) |\n")
 
-            # For new or updated articles, save content to /articles
             if row['is_new']:
-                response = requests.get(row['url'])
+                # Ensure the URL is absolute before making a request
+                absolute_url = ensure_absolute_url(row['url'])
+                response = requests.get(absolute_url)
                 article_content = BeautifulSoup(response.content, 'html.parser').select_one('article').get_text(separator="\n", strip=True) if BeautifulSoup(response.content, 'html.parser').select_one('article') else 'Content not found'
                 filename = f"articles/{sanitize_title(row['title'])}.md"
                 with open(filename, 'w') as article_file:
