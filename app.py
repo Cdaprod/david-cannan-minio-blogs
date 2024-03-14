@@ -41,7 +41,7 @@ def update_readme_and_store_articles(articles_df):
 
     # Convert existing README content to a DataFrame for easier comparison
     existing_urls = set(re.findall(r'\[Link\]\((.*?)\)', existing_content))
-    
+
     # Filter new articles by checking if URL is not in existing URLs
     new_articles = articles_df[~articles_df['url'].isin(existing_urls)]
 
@@ -53,11 +53,16 @@ def update_readme_and_store_articles(articles_df):
 
         # Save individual article content to /articles directory
         for _, row in new_articles.iterrows():
+            # Skip fetching content if URL is invalid (e.g., 'nan' or missing scheme)
+            if pd.isna(row['url']) or not re.match(r'^https?:\/\/', row['url']):
+                print(f"Skipping invalid URL for article: {row['title']}")
+                continue
+
             response = requests.get(row['url'])
             article_content = BeautifulSoup(response.content, 'html.parser').select_one('article').get_text(separator="\n", strip=True) if BeautifulSoup(response.content, 'html.parser').select_one('article') else 'Content not found'
             sanitized_title = sanitize_title(row['title'])
             filename = f"articles/{sanitized_title}.md"
-            
+
             # Check if file already exists to avoid duplicates
             if not os.path.exists(filename):
                 with open(filename, 'w') as article_file:
