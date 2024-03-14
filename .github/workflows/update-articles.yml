@@ -23,7 +23,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install requests beautifulsoup4 pandas pytz minio weaviate-client unstructured
+        pip install requests beautifulsoup4 pandas pytz
         
     - name: Run app.py
       run: python app.py
@@ -31,9 +31,11 @@ jobs:
     - name: Check for changes
       id: changes
       run: |
-        if git diff --quiet articles.md; then
+        if git diff --quiet README.md || git diff --quiet articles/; then
+          echo "No changes detected."
           echo "::set-output name=changed::false"
         else
+          echo "Changes detected."
           echo "::set-output name=changed::true"
         fi
         
@@ -42,8 +44,8 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add articles.md
-        git commit -m "Update articles.md"
+        git add README.md articles/
+        git commit -m "Update articles and README.md"
         
     - name: Push changes
       if: steps.changes.outputs.changed == 'true'
