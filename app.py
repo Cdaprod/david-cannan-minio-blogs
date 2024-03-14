@@ -16,7 +16,10 @@ def fetch_and_parse_articles():
         author = 'David Cannan'
         summary = article.select_one('div.post__content > p').text.strip() if article.select_one('div.post__content > p') else ''
         date = article.find('time').text.strip() if article.find('time') else ''
-        link = article.find('h2').find('a')['href'] if article.find('h2').find('a') else ''
+        
+        title_link = article.find('h2').find('a')
+        link = title_link['href'] if title_link else ''
+        
         articles.append((title, author, summary, date, link))
 
     return pd.DataFrame(articles, columns=['title', 'author', 'summary', 'date', 'url'])
