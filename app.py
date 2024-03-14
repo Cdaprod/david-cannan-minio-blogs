@@ -20,6 +20,7 @@ def fetch_and_parse_articles():
         articles.append((title, author, summary, date, link))
 
     return pd.DataFrame(articles, columns=['title', 'author', 'summary', 'date', 'url'])
+
 def extract_article_content(url):
     base_url = 'https://blog.min.io'
     response = requests.get(base_url + url)
@@ -41,11 +42,13 @@ def update_articles_md(new_articles_df):
     new_entries = merged_df[merged_df['_merge'] == 'left_only']
 
     if not new_entries.empty:
+        new_entries = new_entries.reindex(columns=['title', 'author', 'summary', 'date', 'url'], fill_value='')
+
         with open('articles.md', 'w') as f:
             f.write("| Title | Author | Summary | Date | URL |\n")
             f.write("| ----- | ------ | ------- | ---- | --- |\n")
             existing_articles_df.to_csv(f, sep='|', index=False, header=False)
-            new_entries[['title', 'author', 'summary', 'date', 'url']].to_csv(f, sep='|', index=False, header=False)
+            new_entries.to_csv(f, sep='|', index=False, header=False)
 
         print(f"Added {len(new_entries)} new articles to articles.md")
         
