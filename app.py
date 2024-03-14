@@ -55,29 +55,12 @@ def fetch_and_parse_articles():
         summary = article.select_one('div.post__content > p').text.strip() if article.select_one('div.post__content > p') else ''
         date = article.find('time').text.strip() if article.find('time') else ''
         
-        article_link = article.select_one('a.post__more')
+        article_link = article.select_one('a.post__img')
         link = article_link['href'] if article_link else ''
         
         articles.append((title, author, summary, date, link))
 
     return pd.DataFrame(articles, columns=['title', 'author', 'summary', 'date', 'url'])
-
-# def extract_article_content(url):
-#     try:
-#         response = requests.get(url)
-#         response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
-#         soup = BeautifulSoup(response.text, 'html.parser')
-#         article_content = soup.find('section', class_='post-full-content')
-        
-#         if article_content:
-#             return article_content.get_text(separator='\n', strip=True)
-#         else:
-#             print(f"Article content not found for: {url}")
-#             return None
-#     except requests.exceptions.RequestException as e:
-#         print(f"Error fetching article content: {url}")
-#         print(f"Error details: {str(e)}")
-#         return None
 
 def extract_article_content(url):
     if not url:
