@@ -13,18 +13,22 @@ def fetch_and_parse_articles():
 
     articles = []
     for article in soup.select('article.post-card'):
-        title = article.find('h2').text.strip()
+        title = article.find('h2').text.strip() if article.find('h2') else 'No Title Available'
         author = 'David Cannan'
-        summary = article.select_one('div.post__content > p').text.strip() if article.select_one('div.post__content > p') else ''
-        date = article.find('time').text.strip() if article.find('time') else ''
         
-        article_link = article.select_one('a.post__img')
-        link = 'https://blog.min.io' + article_link['href'] if article_link else ''
+        # Extract summary/excerpt correctly
+        summary = article.select_one('.post__content').text.strip() if article.select_one('.post__content') else 'Summary not available'
+        
+        # Ensure correct date extraction
+        date = article.find('time').get('datetime', 'Date not available').strip() if article.find('time') else 'Date not available'
+        
+        # Correct the article link extraction
+        article_link = article.select_one('a[href]')
+        link = 'https://blog.min.io' + article_link['href'] if article_link else 'URL not available'
         
         articles.append((title, author, summary, date, link))
 
     return pd.DataFrame(articles, columns=['title', 'author', 'summary', 'date', 'url'])
-
 def extract_article_content(url):
     if not url:
         print("Empty URL. Skipping article content extraction.")
