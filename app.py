@@ -23,7 +23,8 @@ def fetch_and_parse_articles():
 
 def extract_article_content(url):
     base_url = 'https://blog.min.io'
-    response = requests.get(base_url + url)
+    full_url = base_url + url
+    response = requests.get(full_url)
     soup = BeautifulSoup(response.text, 'html.parser')
     article_content = soup.find('section', class_='post-full-content')
     
