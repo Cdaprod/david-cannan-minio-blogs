@@ -16,16 +16,14 @@ def fetch_and_parse_articles():
         author = 'David Cannan'
         summary = article.select_one('div.post__content > p').text.strip() if article.select_one('div.post__content > p') else ''
         date = article.find('time').text.strip() if article.find('time') else ''
-        link = article.find('a', class_='post__more')['href'] if article.find('a', class_='post__more') else ''
+        link = article.find('h2').find('a')['href'] if article.find('h2').find('a') else ''
         articles.append((title, author, summary, date, link))
 
     return pd.DataFrame(articles, columns=['title', 'author', 'summary', 'date', 'url'])
-
+ 
 def extract_article_content(url):
-    base_url = 'https://blog.min.io'
-    full_url = base_url + url
     try:
-        response = requests.get(full_url)
+        response = requests.get(url)
         response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
         soup = BeautifulSoup(response.text, 'html.parser')
         article_content = soup.find('section', class_='post-full-content')
@@ -33,10 +31,10 @@ def extract_article_content(url):
         if article_content:
             return article_content.get_text(separator='\n', strip=True)
         else:
-            print(f"Article content not found for: {full_url}")
+            print(f"Article content not found for: {url}")
             return None
     except requests.exceptions.RequestException as e:
-        print(f"Error fetching article content: {full_url}")
+        print(f"Error fetching article content: {url}")
         print(f"Error details: {str(e)}")
         return None
 
