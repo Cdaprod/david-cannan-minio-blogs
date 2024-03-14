@@ -5,26 +5,10 @@ from datetime import datetime
 import pytz
 import os
 import re
-from minio import Minio
-import weaviate
-import tempfile
-from unstructured.partition.auto import partition
-import io
 
-# Constants for Script 1
+# Constants
 AUTHOR = 'David Cannan'
 BLOG_URL = 'https://blog.min.io/author/david-cannan'
-
-# Constants for Script 2
-MINIO_ENDPOINT = "play.min.io:443"
-MINIO_ACCESS_KEY = "minioadmin"
-MINIO_SECRET_KEY = "minioadmin"
-WEAVIATE_ENDPOINT = "http://localhost:8080"
-BUCKET_NAME = "cda-datasets"
-
-# Initialize Minio and Weaviate clients
-#minio_client = Minio(MINIO_ENDPOINT, access_key=MINIO_ACCESS_KEY, secret_key=MINIO_SECRET_KEY, secure=True)
-#weaviate_client = weaviate.Client(url=WEAVIATE_ENDPOINT, timeout_config=(5, 15))
 
 def fetch_and_parse_articles():
     response = requests.get(BLOG_URL)
@@ -38,27 +22,38 @@ def fetch_and_parse_articles():
         article_link = article.select_one('a[href]')
         link = 'https://blog.min.io' + article_link['href'] if article_link else 'URL not available'
         articles.append((title, AUTHOR, summary, date, link))
+    
     return pd.DataFrame(articles, columns=['title', 'author', 'summary', 'date', 'url'])
 
-def process_and_store_articles(articles_df):
+def update_readme_and_store_articles(articles_df):
     if not os.path.exists('articles'):
         os.makedirs('articles')
 
-    for _, row in articles_df.iterrows():
-        response = requests.get(row['url'])
-        html_content = io.BytesIO(response.content)
-        elements = partition(file=html_content, content_type="text/html")
-        article_content = "\n".join([e.text for e in elements if hasattr(e, 'text')])
+    try:
+        existing_articles_df = pd.read_csv('README.md', sep='|', skiprows=2, names=['title', 'author', 'summary', 'date', 'url'])
+    except FileNotFoundError:
+        existing_articles_df = pd.DataFrame(columns=['title', 'author', 'summary', 'date', 'url'])
+
+    new_articles = pd.concat([articles_df, existing_articles_df]).drop_duplicates(subset=['title'], keep=False)
+    
+    if not new_articles.empty:
+        with open('README.md', 'a') as f:  # Append new articles to README.md
+            for _, row in new_articles.iterrows():
+                f.write(f"| {row['title']} | {row['author']} | {row['summary']} | {row['date']} | [Link]({row['url']}) |\n")
+                
+                # Store article content in the /articles/ directory
+                response = requests.get(row['url'])
+                article_content = BeautifulSoup(response.content, 'html.parser').get_text()
+                filename = f"{re.sub(r'[^\\w\\-]', '_', row['title'])[:250]}.md"
+                with open(f'articles/{filename}', 'w') as article_file:
+                    article_file.write(f"# {row['title']}\n\n{article_content}\n")
         
-        filename = re.sub(r'[^\w\-_\.]', '_', row['title'])[:250] + '.md'
-        with open(f'articles/{filename}', 'w') as f:
-            f.write(f"# {row['title']}\n\n{article_content}\n")
-        
-        # Optional: Store in Minio and index in Weaviate
-        # Similar process to Script 2 can be added here if necessary
+        print(f"Added {len(new_articles)} new articles to README.md and /articles/ directory.")
+    else:
+        print("No new articles found.")
 
 if __name__ == "__main__":
     est = pytz.timezone('US/Eastern')
     print(f"Running update job at {datetime.now(est)} EST")
     articles_df = fetch_and_parse_articles()
-    process_and_store_articles(articles_df)
+    update_readme_and_store_articles(articles_df)
