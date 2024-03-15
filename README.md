@@ -2,6 +2,8 @@
 
 | Title | Author | Summary | Date | Link |
 |-------|--------|---------|------|------|
+| Powering AI/ML Innovation: Building Feature Stores with MinIO’s High-Performance Object Storage | David Cannan | MinIO’s high-performance object storage is key for AI innovation, offering scalability and integration for feature stores. Its capabilities enable seamless ML workflows, enhancing data management for AI development and deployment, impacting sectors like e-commerce and healthcare.
+Read more... | 2024-03-14 | [Link](https://blog.min.io/minio-feature-store-foundation/) |
 | Deploying MinIO with GitOps on Self-Hosted Infrastructure | David Cannan | This article unveils the synergy between MinIO and GitOps, utilizing self-hosted GitHub Actions to redefine CI/CD workflows. It emphasizes streamlined data management, security, and the efficiency of deploying scalable software.
 Read more... | 2024-03-10 | [Link](https://blog.min.io/minio-self-hosted-gitops/) |
 | Dynamic ETL Pipeline: Hydrate AI with Web Data for MinIO and Weaviate using Unstructured-IO | David Cannan | Unstructured-IO, MinIO, & Weaviate redefine ETL, turning unstructured web data into actionable insights. This collaboration enhances data management, offering a robust solution for dynamic data transformation and analysis, marking a leap in how we process and leverage web-generated content.
