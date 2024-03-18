@@ -62,7 +62,7 @@ version: '3.8'
 services:
   weaviate:
     container_name: weaviate_server
-    image: semitechnologies/weaviate:latest
+    image: cr.weaviate.io/semitechnologies/weaviate:latest
     ports:
       - "8080:8080"
     environment:
