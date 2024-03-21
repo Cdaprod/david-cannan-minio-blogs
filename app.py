@@ -19,10 +19,12 @@ def fetch_and_parse_articles():
         title = article.find('h2').text.strip() if article.find('h2') else 'No Title Available'
         summary = article.select_one('.post__content').text.strip() if article.select_one('.post__content') else 'Summary not available'
         date = article.find('time')['datetime'].strip() if article.find('time') else 'Date not available'
-        link = article.select_one('a[href]')['href'] if article.select_one('a[href]') else 'URL not available'
+        link = article.select_one('a[href]')['href'] if article.select_one('a[href') else 'URL not available'
         articles.append({"title": title, "author": AUTHOR, "summary": summary, "date": date, "url": link})
 
-    return pd.DataFrame(articles)
+    df = pd.DataFrame(articles)
+    df['index'] = range(len(df), 0, -1)  # Add a reverse index starting from the total number of articles
+    return df
 
 def sanitize_title(title):
     return re.sub(r'[^\w\-]', '_', title)[:250]
@@ -46,10 +48,10 @@ def update_readme_and_articles(articles_df):
     # Update README.md
     with open('README.md', 'w') as f:
         f.write("# David Cannan's MinIO Publications\n\n")
-        f.write("| Title | Author | Summary | Date | Link |\n")
-        f.write("|-------|--------|---------|------|------|\n")
+        f.write("| No. | Title | Author | Summary | Date | Link |\n")
+        f.write("|-----|-------|--------|---------|------|------|\n")
         for index, row in articles_df.iterrows():
-            f.write(f"| {row['title']} | {row['author']} | {row['summary']} | {row['date']} | [Link]({ensure_absolute_url(row['url'])}) |\n")
+            f.write(f"| {row['index']} | {row['title']} | {row['author']} | {row['summary']} | {row['date']} | [Link]({ensure_absolute_url(row['url'])}) |\n")
 
             if row['is_new']:
                 # Ensure the URL is absolute before making a request
