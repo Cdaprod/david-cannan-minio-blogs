@@ -19,7 +19,7 @@ def fetch_and_parse_articles():
         title = article.find('h2').text.strip() if article.find('h2') else 'No Title Available'
         summary = article.select_one('.post__content').text.strip() if article.select_one('.post__content') else 'Summary not available'
         date = article.find('time')['datetime'].strip() if article.find('time') else 'Date not available'
-        link = article.select_one('a[href]')['href'] if article.select_one('a[href') else 'URL not available'
+        link = article.select_one('a[href]')['href'] if article.select_one('a[href]') else 'URL not available'
         articles.append({"title": title, "author": AUTHOR, "summary": summary, "date": date, "url": link})
 
     df = pd.DataFrame(articles)
