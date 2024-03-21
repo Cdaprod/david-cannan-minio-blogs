@@ -1,12 +1,3 @@
-#### To utilize this repository for yourself...
-1. Fork/Template this repository, and replace the `BASE_URL` to your MinIO Blog author page's URL.
-2. Add your GH_TOKEN to your new repository.
-3. Runs on: dispatch, schedule, push.
-
----
-
-# David Cannan's MinIO Publications
-[![Update Articles](https://github.com/Cdaprod/david-cannan-minio-blogs/actions/workflows/update-articles.yml/badge.svg)](https://github.com/Cdaprod/david-cannan-minio-blogs/actions/workflows/update-articles.yml)
 # David Cannan's MinIO Publications
 
 | Title | Author | Summary | Date | Link |
