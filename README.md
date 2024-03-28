@@ -1,15 +1,13 @@
-[![Update Articles](https://github.com/Cdaprod/david-cannan-minio-blogs/actions/workflows/update-articles.yml/badge.svg)](https://github.com/Cdaprod/david-cannan-minio-blogs/actions/workflows/update-articles.yml)
-
 # David Cannan's MinIO Publications
 
 | No. | Title | Author | Summary | Date | Link |
 |-----|-------|--------|---------|------|------|
-| 11 | Advanced Recovery Strategies with Docker and GitOps | David Cannan | When disaster strikes, the power of GitOps shines, transforming potential chaos into a choreographed comeback. Learn how strategic automation, redundancy, and Docker and GitHub integration ensure swift recovery, turning system wipes into minor setbacks.
-Read more... | 2024-03-21 | [Link](https://blog.min.io/advanced-gitops-strategies/) |
+| 11 | Disaster Proof MinIO with GitOps | David Cannan | When disaster strikes, the power of GitOps shines, transforming potential chaos into a choreographed comeback. Learn how strategic automation, redundancy, and Docker and GitHub integration ensure swift recovery, turning system wipes into minor setbacks.
+Read more... | 2024-03-19 | [Link](https://blog.min.io/disaster-proof-minio-with-gitops/) |
 | 10 | Powering AI/ML Innovation: Building Feature Stores with MinIO’s High-Performance Object Storage | David Cannan | MinIO’s high-performance object storage is key for AI innovation, offering scalability and integration for feature stores. Its capabilities enable seamless ML workflows, enhancing data management for AI development and deployment, impacting sectors like e-commerce and healthcare.
-Read more... | 2024-03-14 | [Link](https://blog.min.io/minio-feature-store-foundation/) |
+Read more... | 2024-03-12 | [Link](https://blog.min.io/minio-feature-store-foundation/) |
 | 9 | Deploying MinIO with GitOps on Self-Hosted Infrastructure | David Cannan | This article unveils the synergy between MinIO and GitOps, utilizing self-hosted GitHub Actions to redefine CI/CD workflows. It emphasizes streamlined data management, security, and the efficiency of deploying scalable software.
-Read more... | 2024-03-10 | [Link](https://blog.min.io/minio-self-hosted-gitops/) |
+Read more... | 2024-03-05 | [Link](https://blog.min.io/minio-self-hosted-gitops/) |
 | 8 | Dynamic ETL Pipeline: Hydrate AI with Web Data for MinIO and Weaviate using Unstructured-IO | David Cannan | Unstructured-IO, MinIO, & Weaviate redefine ETL, turning unstructured web data into actionable insights. This collaboration enhances data management, offering a robust solution for dynamic data transformation and analysis, marking a leap in how we process and leverage web-generated content.
 Read more... | 2024-02-27 | [Link](https://blog.min.io/minio-weaviate-unstructured-io/) |
 | 7 | Developing Langchain Agents with the MinIO SDK for LLM Tool-Use | David Cannan | Explore Langchain’s LLM Tool-Use and leverage Langgraph for monitoring MinIO’s S3 Object Store. This guide walks you through developing custom conversational AI agents and creating powerful OpenAI LLM chains for efficient data management and enhanced application functionality.
