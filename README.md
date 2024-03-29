@@ -2,6 +2,8 @@
 
 | No. | Title | Author | Summary | Date | Link |
 |-----|-------|--------|---------|------|------|
+| 12 | MinIO Networking with Overlay Networks | David Cannan | Overlay networks enable seamless multi-host deployments for MinIO’s cloud-native S3-compatible storage solutions. Emphasizing security, scalability, and robust container networking, these technologies streamline complex cloud architectures.
+Read more... | 2024-03-29 | [Link](https://blog.min.io/minio-networking-with-overlay-networks/) |
 | 11 | Disaster Proof MinIO with GitOps | David Cannan | When disaster strikes, the power of GitOps shines, transforming potential chaos into a choreographed comeback. Learn how strategic automation, redundancy, and Docker and GitHub integration ensure swift recovery, turning system wipes into minor setbacks.
 Read more... | 2024-03-19 | [Link](https://blog.min.io/disaster-proof-minio-with-gitops/) |
 | 10 | Powering AI/ML Innovation: Building Feature Stores with MinIO’s High-Performance Object Storage | David Cannan | MinIO’s high-performance object storage is key for AI innovation, offering scalability and integration for feature stores. Its capabilities enable seamless ML workflows, enhancing data management for AI development and deployment, impacting sectors like e-commerce and healthcare.
