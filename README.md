@@ -2,6 +2,8 @@
 
 | No. | Title | Author | Summary | Date | Link |
 |-----|-------|--------|---------|------|------|
+| 13 | Building and Deploying a MinIO-Powered LangChain Agent API with LangServe | David Cannan | Explore the exciting possibilities of leveraging MinIO and LangChain to create a robust and efficient agent capable of handling complex data processing tasks.
+Read more... | 2024-04-09 | [Link](https://blog.min.io/minio-powered-langchain-agent-with-langserve/) |
 | 12 | MinIO Networking with Overlay Networks | David Cannan | Overlay networks enable seamless multi-host deployments for MinIO’s cloud-native S3-compatible storage solutions. Emphasizing security, scalability, and robust container networking, these technologies streamline complex cloud architectures.
 Read more... | 2024-03-29 | [Link](https://blog.min.io/minio-networking-with-overlay-networks/) |
 | 11 | Disaster Proof MinIO with GitOps | David Cannan | When disaster strikes, the power of GitOps shines, transforming potential chaos into a choreographed comeback. Learn how strategic automation, redundancy, and Docker and GitHub integration ensure swift recovery, turning system wipes into minor setbacks.
