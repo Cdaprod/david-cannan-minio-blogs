@@ -239,3 +239,4 @@ Value Engineering
 Change Data Capture
 Enterprise Object Store
 GitOps
+Case Study

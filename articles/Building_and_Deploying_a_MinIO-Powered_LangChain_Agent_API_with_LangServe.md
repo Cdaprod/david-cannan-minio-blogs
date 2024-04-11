@@ -469,6 +469,7 @@ At MinIO, we’re energized by the creativity and potential within the developer
 MinIO Slack
 channel to continue the conversation and reach new heights together.
 Previous Post
+Next Post
 S3 Select
 Security
 Modern Data Lakes
@@ -556,3 +557,4 @@ Value Engineering
 Change Data Capture
 Enterprise Object Store
 GitOps
+Case Study
