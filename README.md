@@ -1,6 +1,6 @@
-# David Cannan's MinIO Publications
-
 [![Update Articles](https://github.com/Cdaprod/david-cannan-minio-blogs/actions/workflows/update-articles.yml/badge.svg)](https://github.com/Cdaprod/david-cannan-minio-blogs/actions/workflows/update-articles.yml)
+
+# David Cannan's MinIO Publications
 
 | No. | Title | Author | Summary | Date | Link |
 |-----|-------|--------|---------|------|------|
