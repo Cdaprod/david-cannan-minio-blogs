@@ -2,6 +2,8 @@
 
 | No. | Title | Author | Summary | Date | Link |
 |-----|-------|--------|---------|------|------|
+| 14 | Optimizing AI Data Processing with MinIO Weaviate and Langchain in RAG Pipelines | David Cannan | Delve into AI’s next frontier with MinIO S3 Object-Store, enhancing Weaviate RAG for robust data management. Discover how to elevate efficiency in AI systems using LangChain, unlocking new dimensions in scalable AI solutions.
+Read more... | 2024-04-29 | [Link](https://blog.min.io/optimizing-ai-data-processing-with-minio-weaviate-and-langchain-in-rag-pipelines/) |
 | 13 | Building and Deploying a MinIO-Powered LangChain Agent API with LangServe | David Cannan | Explore the exciting possibilities of leveraging MinIO and LangChain to create a robust and efficient agent capable of handling complex data processing tasks.
 Read more... | 2024-04-09 | [Link](https://blog.min.io/minio-powered-langchain-agent-with-langserve/) |
 | 12 | MinIO Networking with Overlay Networks | David Cannan | Overlay networks enable seamless multi-host deployments for MinIO’s cloud-native S3-compatible storage solutions. Emphasizing security, scalability, and robust container networking, these technologies streamline complex cloud architectures.
