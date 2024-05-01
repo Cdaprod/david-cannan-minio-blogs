@@ -1,5 +1,7 @@
 # David Cannan's MinIO Publications
 
+[![Update Articles](https://github.com/Cdaprod/david-cannan-minio-blogs/actions/workflows/update-articles.yml/badge.svg)](https://github.com/Cdaprod/david-cannan-minio-blogs/actions/workflows/update-articles.yml)
+
 | No. | Title | Author | Summary | Date | Link |
 |-----|-------|--------|---------|------|------|
 | 14 | Optimizing AI Data Processing with MinIO Weaviate and Langchain in RAG Pipelines | David Cannan | Delve into AI’s next frontier with MinIO S3 Object-Store, enhancing Weaviate RAG for robust data management. Discover how to elevate efficiency in AI systems using LangChain, unlocking new dimensions in scalable AI solutions.
