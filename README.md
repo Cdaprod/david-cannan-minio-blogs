@@ -2,6 +2,8 @@
 
 | No. | Title | Author | Summary | Date | Link |
 |-----|-------|--------|---------|------|------|
+| 15 | Deploying Application Infrastructure with MinIO S3 and Tailscale VPN | David Cannan | Learn how MinIO S3 object storage and Tailscale VPN simplify deploying secure and scalable application infrastructure. This blog covers how their integration offers secure networking, streamlined access, and advanced features to serve hosted applications with Tailscale.
+Read more... | 2024-05-10 | [Link](https://blog.min.io/deploying-application-infrastructure-minio-tailscale-vpn/) |
 | 14 | Optimizing AI Data Processing with MinIO Weaviate and Langchain in Retrieval Augmented Generation (RAG) Pipelines | David Cannan | Delve into AI’s next frontier with MinIO S3 Object-Store and SDK, enhancing a Weaviate Retreival Augmented Generation (RAG) Pipeline for robust data management. Discover how to elevate efficiency in AI systems using LangChain, unlocking new dimensions in scalable AI solutions.
 Read more... | 2024-04-29 | [Link](https://blog.min.io/optimizing-ai-data-processing-with-minio-weaviate-and-langchain-in-retrieval-augmented-generation-rag-pipelines/) |
 | 13 | Building and Deploying a MinIO-Powered LangChain Agent API with LangServe | David Cannan | Explore the exciting possibilities of leveraging MinIO and LangChain to create a robust and efficient agent capable of handling complex data processing tasks.
