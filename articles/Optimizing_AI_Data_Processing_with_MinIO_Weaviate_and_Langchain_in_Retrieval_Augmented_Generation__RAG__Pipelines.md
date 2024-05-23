@@ -412,3 +412,4 @@ Enterprise Object Store
 GitOps
 Case Study
 Equinix
+Certifications

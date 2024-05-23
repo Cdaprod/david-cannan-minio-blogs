@@ -261,6 +261,7 @@ For additional support or to connect with the community, feel free to join the c
 MinIO Slack
 channel, where experts share insights and answer questions about deploying, managing, and optimizing MinIO.
 Previous Post
+Next Post
 S3 Select
 Security
 Modern Data Lakes
@@ -350,3 +351,4 @@ Enterprise Object Store
 GitOps
 Case Study
 Equinix
+Certifications
