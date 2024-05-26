@@ -179,3 +179,4 @@ GitOps
 Case Study
 Equinix
 Certifications
+Snowflake
