@@ -288,6 +288,7 @@ So, what are you waiting for? Start integrating GitHub Actions with MinIO and Ta
 MinIO Slack
 to show off! Happy coding!
 Previous Post
+Next Post
 S3 Select
 Security
 Modern Data Lakes
@@ -379,3 +380,4 @@ Case Study
 Equinix
 Certifications
 Snowflake
+Repatriation
