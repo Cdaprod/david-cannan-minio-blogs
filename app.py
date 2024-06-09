@@ -45,31 +45,30 @@ def download_image(image_url, save_path):
         return save_path
     return None
 
-def clean_article_content(content):
-    lines = content.split('\n')
+def clean_article_content(article):
+    content_section = article.select_one('section.post-content')
+    if not content_section:
+        return "Content not found"
+    
+    # Extract and clean the content
+    paragraphs = content_section.find_all(['p', 'h2', 'h3', 'ul', 'ol', 'pre', 'blockquote'])
     cleaned_lines = []
-    skip_lines = [
-        'Share:', 'Follow:', 'Previous Post', 'Next Post', 'LinkedIn', 'X (Twitter)', 'Reddit',
-        'Copy Article Link', 'Email Article', 'MinIO Slack', 'Best Practices', 'Get Started with MinIO',
-        'Advanced Topics'
-    ]
-    add_line = True
-
-    for line in lines:
-        # Skip lines that contain any of the skip keywords
-        if any(skip in line for skip in skip_lines):
-            add_line = False
-        if 'on' in line and 'David Cannan' in line:
-            add_line = False
-        if re.match(r'^.*\d{1,2} \w+ \d{4}.*$', line):
-            add_line = False
-        if not line.strip():
-            add_line = True
-        # Add cleaned lines
-        if add_line and not any(skip in line for skip in skip_lines):
-            cleaned_lines.append(line.strip())
-
-    return '\n'.join(cleaned_lines).strip()
+    
+    for paragraph in paragraphs:
+        # Skip unwanted tags and content
+        if paragraph.name in ['ul', 'ol']:
+            items = [f"* {li.get_text(strip=True)}" for li in paragraph.find_all('li')]
+            cleaned_lines.extend(items)
+        elif paragraph.name == 'pre':
+            code = paragraph.get_text(strip=True)
+            cleaned_lines.append(f"```\n{code}\n```")
+        elif paragraph.name == 'blockquote':
+            quote = paragraph.get_text(strip=True)
+            cleaned_lines.append(f"> {quote}")
+        else:
+            cleaned_lines.append(paragraph.get_text(strip=True))
+    
+    return '\n\n'.join(cleaned_lines).strip()
 
 def update_readme_and_articles(articles_df):
     if not os.path.exists('articles'):
@@ -108,18 +107,18 @@ def update_readme_and_articles(articles_df):
             absolute_url = ensure_absolute_url(row['url'])
             response = requests.get(absolute_url)
             soup = BeautifulSoup(response.content, 'html.parser')
-            article_content = soup.select_one('article').get_text(separator="\n", strip=True) if soup.select_one('article') else 'Content not found'
-            cleaned_content = clean_article_content(article_content)
+            article = soup.select_one('article.post')
+            article_content = clean_article_content(article)
             filename = f"articles/{sanitize_title(row['title'])}.md"
 
             if row['image_url']:
                 image_url = urljoin(absolute_url, row['image_url'])
                 image_path = f"articles/images/{sanitize_title(row['title'])}.jpg"
                 download_image(image_url, image_path)
-                cleaned_content = f"![Header Image]({image_path})\n\n{cleaned_content}"
+                article_content = f"![Header Image](/{image_path})\n\n{article_content}"
 
             with open(filename, 'w') as article_file:
-                article_file.write(f"# {row['title']}\n\n{cleaned_content}\n")
+                article_file.write(f"# {row['title']}\n\n{article_content}\n")
 
     updated_readme_content = readme_content[:start_index] + '\n' + new_content + '\n' + readme_content[end_index:]
 
