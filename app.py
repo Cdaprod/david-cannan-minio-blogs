@@ -48,14 +48,19 @@ def download_image(image_url, save_path):
 def clean_article_content(content):
     lines = content.split('\n')
     cleaned_lines = []
-    skip_lines = ['Share:', 'Follow:', 'Previous Post', 'Next Post']
+    skip_lines = [
+        'Share:', 'Follow:', 'Previous Post', 'Next Post', 
+        'LinkedIn', 'X (Twitter)', 'Reddit', 'Copy Article Link', 'Email Article'
+    ]
+    add_line = True
 
     for line in lines:
         if any(skip in line for skip in skip_lines):
-            continue
-        if 'Linkedin' in line or 'Twitter' in line or 'Reddit' in line or 'Copy Article Link' in line or 'Email Article' in line:
-            continue
-        cleaned_lines.append(line.strip())
+            add_line = False
+        if not line.strip():
+            add_line = True
+        if add_line and not any(skip in line for skip in skip_lines):
+            cleaned_lines.append(line.strip())
 
     return '\n'.join(cleaned_lines).strip()
 
