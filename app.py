@@ -46,19 +46,24 @@ def download_image(image_url, save_path):
     return None
 
 def clean_article_content(content):
+    # Split content by lines
     lines = content.split('\n')
     cleaned_lines = []
     skip_lines = [
-        'Share:', 'Follow:', 'Previous Post', 'Next Post', 
-        'LinkedIn', 'X (Twitter)', 'Reddit', 'Copy Article Link', 'Email Article'
+        'Share:', 'Follow:', 'Previous Post', 'Next Post', 'LinkedIn',
+        'X (Twitter)', 'Reddit', 'Copy Article Link', 'Email Article',
+        'MinIO Slack', 'Best Practices', 'Get Started with MinIO', 'Advanced Topics'
     ]
     add_line = True
 
     for line in lines:
+        # Skip lines that contain any of the skip keywords
         if any(skip in line for skip in skip_lines):
             add_line = False
+        # If an empty line is encountered, start adding lines again
         if not line.strip():
             add_line = True
+        # Add cleaned lines
         if add_line and not any(skip in line for skip in skip_lines):
             cleaned_lines.append(line.strip())
 
@@ -109,7 +114,7 @@ def update_readme_and_articles(articles_df):
                 image_url = urljoin(absolute_url, row['image_url'])
                 image_path = f"articles/images/{sanitize_title(row['title'])}.jpg"
                 download_image(image_url, image_path)
-                cleaned_content = f"![Header Image](/{image_path})\n\n{cleaned_content}"
+                cleaned_content = f"![Header Image]({image_path})\n\n{cleaned_content}"
 
             with open(filename, 'w') as article_file:
                 article_file.write(f"# {row['title']}\n\n{cleaned_content}\n")
