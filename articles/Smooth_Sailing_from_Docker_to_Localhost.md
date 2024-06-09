@@ -1,6 +1,6 @@
 # Smooth Sailing from Docker to Localhost
 
-![Header Image](/articles/images/Smooth_Sailing_from_Docker_to_Localhost.jpg)
+![Header Image](articles/images/Smooth_Sailing_from_Docker_to_Localhost.jpg)
 
 Smooth Sailing from Docker to Localhost
 David Cannan

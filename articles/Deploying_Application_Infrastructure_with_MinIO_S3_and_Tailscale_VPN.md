@@ -1,6 +1,6 @@
 # Deploying Application Infrastructure with MinIO S3 and Tailscale VPN
 
-![Header Image](/articles/images/Deploying_Application_Infrastructure_with_MinIO_S3_and_Tailscale_VPN.jpg)
+![Header Image](articles/images/Deploying_Application_Infrastructure_with_MinIO_S3_and_Tailscale_VPN.jpg)
 
 Deploying Application Infrastructure with MinIO S3 and Tailscale VPN
 David Cannan
@@ -188,24 +188,3 @@ Funnel allows controlled public exposure of services, enabling secure access fro
 OAuth integration provides a unified authentication mechanism, ensuring consistent access control across teams and environments.
 API keys enable programmatic management of Tailscale settings, automating tasks like certificate renewal to maintain validity.
 Proper configuration of these features helps ensure seamless integration and reliable operation of the MinIO-Tailscale setup.
-Best Practices
-Authentication
-Use OAuth keys for persistent authorization to enable stable, long-term access.
-Manage sensitive credentials like API keys and OAuth secrets via secure vaults or secrets management systems.
-Regularly rotate and update credentials to maintain security and prevent unauthorized access.
-Network Configuration
-Review Tailscale's IP range and ensure it aligns with MinIO's network settings for proper connectivity.
-Maintain the TS_SERVE_CONFIG file to handle traffic routing efficiently and securely.
-Use meaningful, standardized naming conventions for Tailscale devices and subnets to keep the network organized and manageable as it scales.
-Load Balancing
-Implement Tailscale's access control rules to distribute network load effectively across nodes, ensuring reliable performance.
-Monitor network traffic and resource usage with tools like Prometheus or Grafana to identify bottlenecks and optimize load balancing settings.
-Regularly review and adjust load balancing configurations to adapt to changing usage patterns and maintain a responsive user experience.
-Overlay Networking with Tailscale
-By combining MinIO's high-performance, S3-compatible object storage with Tailscale's secure, zero-trust networking, organizations can create a powerful and flexible foundation for their initiatives. This setup enables businesses to securely manage and analyze operational data across diverse environments, from on-premises data centers to public cloud platforms.
-The seamless integration of MinIO and Tailscale, along with their cloud-native architecture and robust feature sets, empowers teams to harness the full potential of application layer operations. With streamlined data access, granular control over network policies, and strong encryption built-in, this infrastructure stack provides the performance, security, and scalability needed to support the most demanding workloads.
-As object-storage continues to evolve and mature, the MinIO-Tailscale combination offers a future-proof foundation for innovation. By adopting best practices around authentication, network configuration, and load balancing, organizations can ensure their infrastructure remains reliable, efficient, and secure as they navigate the challenges and opportunities ahead.
-Whether you're just starting your AI development journey or looking to optimize your existing setup, deploying MinIO with Tailscale is a smart choice. With the right configuration and a commitment to operational excellence, this powerful duo can help you unlock the full value of your data and drive success in the era of intelligent, automated IT operations.
-For additional support or to connect with the community, feel free to join the conversation in the
-MinIO Slack
-channel, where experts share insights and answer questions about deploying, managing, and optimizing MinIO.

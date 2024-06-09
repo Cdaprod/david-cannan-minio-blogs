@@ -1,6 +1,6 @@
 # MinIO Networking with Overlay Networks
 
-![Header Image](/articles/images/MinIO_Networking_with_Overlay_Networks.jpg)
+![Header Image](articles/images/MinIO_Networking_with_Overlay_Networks.jpg)
 
 MinIO Networking with Overlay Networks
 David Cannan

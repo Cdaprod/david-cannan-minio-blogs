@@ -1,6 +1,6 @@
 # Building and Deploying a MinIO-Powered LangChain Agent API with LangServe
 
-![Header Image](/articles/images/Building_and_Deploying_a_MinIO-Powered_LangChain_Agent_API_with_LangServe.jpg)
+![Header Image](articles/images/Building_and_Deploying_a_MinIO-Powered_LangChain_Agent_API_with_LangServe.jpg)
 
 Building and Deploying a MinIO-Powered LangChain Agent API with LangServe
 David Cannan
@@ -404,5 +404,3 @@ is absolutely possible, and how
 LangServe
 plays a pivotal role in deploying these advanced solutions. As we continue to navigate the evolving landscape of AI and ML, tools like LangServe will remain instrumental in bringing cutting-edge technologies to the forefront of application development.
 At MinIO, we’re energized by the creativity and potential within the developer community during this tech-rich era. There’s no better time for collaboration and knowledge exchange. We’re eager to connect with you! Join us on our
-MinIO Slack
-channel to continue the conversation and reach new heights together.

@@ -1,6 +1,6 @@
 # Deploying MinIO with GitOps on Self-Hosted Infrastructure
 
-![Header Image](/articles/images/Deploying_MinIO_with_GitOps_on_Self-Hosted_Infrastructure.jpg)
+![Header Image](articles/images/Deploying_MinIO_with_GitOps_on_Self-Hosted_Infrastructure.jpg)
 
 Deploying MinIO with GitOps on Self-Hosted Infrastructure
 David Cannan
@@ -138,5 +138,3 @@ Elevating Deployment Practices with MinIO and GitOps
 Underscoring MinIO’s dedication to refining storage solutions for contemporary applications, merging seamlessly with the evolution brought about by GitHub self-hosted runners in the CI/CD arena. Embracing GitOps principles places MinIO at the vanguard of a strategic pivot towards more self-reliant, secure, and efficient deployment workflows, significantly enhancing the developer experience.
 The flexibility that GitOps introduces into application development is another sphere where MinIO’s capabilities shine brightly. Developers find themselves well-equipped to refine application layers and deploy microservices with assurance, utilizing MinIO for streamlined data storage and management. This structured and automated method accelerates development, fortifying the resilience and scalability of applications. The incorporation of GitHub Actions and self-hosted runners smoothens the deployment across various settings, fully leveraging MinIO’s object storage strengths.
 We encourage our fellow developers and engineers to dive into this journey with us, explore the potentials, and share their insights and queries. For deeper conversations, collaborations, or queries, feel free to reach out to us on the
-MinIO Slack channel
-. Together, let’s shape the future of deployment practices, leveraging our collective expertise and the powerful capabilities of MinIO and GitOps.

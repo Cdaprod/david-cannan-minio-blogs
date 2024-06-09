@@ -1,6 +1,6 @@
 # Optimizing AI Data Processing with MinIO Weaviate and Langchain in Retrieval Augmented Generation (RAG) Pipelines
 
-![Header Image](/articles/images/Optimizing_AI_Data_Processing_with_MinIO_Weaviate_and_Langchain_in_Retrieval_Augmented_Generation__RAG__Pipelines.jpg)
+![Header Image](articles/images/Optimizing_AI_Data_Processing_with_MinIO_Weaviate_and_Langchain_in_Retrieval_Augmented_Generation__RAG__Pipelines.jpg)
 
 Optimizing AI Data Processing with MinIO Weaviate and Langchain in Retrieval Augmented Generation (RAG) Pipelines
 David Cannan
@@ -219,5 +219,3 @@ Final Thoughts: Enhancing AI Workflows with MinIO
 As we explored the integration of MinIO with Retrieval-Augmented Generation (RAG) pipelines and Weaviate vector storage using Langchain, it's clear that this combination offers significant enhancements to AI data processing. By leveraging MinIO's robust storage capabilities, alongside Weaviate's efficient vector storage and the flexible Langchain framework, we can streamline workflows and manage data more effectively throughout its lifecycle.
 The integration’s impact extends beyond current enhancements, opening up new avenues for innovation within the broader AI landscape. It promises to expand the capabilities of AI systems, especially in generating nuanced, contextually rich responses that could become more commonplace. This ongoing evolution and refinement of tools are set to not only streamline existing processes but also pave the way for new breakthroughs in AI applications.
 For those keen to dive deeper into the burgeoning world of RAG technologies and their applications, engage with us on
-MinIO Slack Channel
-so that we can foster a collaborative environment for exploration and growth. The journey ahead is poised to unlock new capabilities in AI, powered by the continuous refinement and integration of cutting-edge technologies.

@@ -1,6 +1,6 @@
 # Disaster Proof MinIO with GitOps
 
-![Header Image](/articles/images/Disaster_Proof_MinIO_with_GitOps.jpg)
+![Header Image](articles/images/Disaster_Proof_MinIO_with_GitOps.jpg)
 
 Disaster Proof MinIO with GitOps
 David Cannan
