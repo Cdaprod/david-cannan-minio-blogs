@@ -11,7 +11,6 @@ from urllib.parse import urljoin
 AUTHOR = 'David Cannan'
 BLOG_URL = 'https://blog.min.io/author/david-cannan'
 
-# Fetch and parse articles
 def fetch_and_parse_articles():
     response = requests.get(BLOG_URL)
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -29,17 +28,14 @@ def fetch_and_parse_articles():
     df['index'] = range(len(df), 0, -1)  # Add a reverse index starting from the total number of articles
     return df
 
-# Sanitize title to create a valid filename
 def sanitize_title(title):
     return re.sub(r'[^\w\-]', '_', title)[:250]
 
-# Ensure the URL is absolute
 def ensure_absolute_url(url):
     if url.startswith('http'):
         return url
     return 'https://blog.min.io' + url
 
-# Download image
 def download_image(image_url, save_path):
     response = requests.get(image_url, stream=True)
     if response.status_code == 200:
@@ -49,7 +45,6 @@ def download_image(image_url, save_path):
         return save_path
     return None
 
-# Clean and extract article content
 def clean_article_content(article):
     content_section = article.find('section', class_='post-content')
     if not content_section:
@@ -79,7 +74,6 @@ def clean_article_content(article):
     
     return '\n\n'.join(cleaned_lines).strip()
 
-# Update README and save articles
 def update_readme_and_articles(articles_df):
     if not os.path.exists('articles'):
         os.makedirs('articles')
