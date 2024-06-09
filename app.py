@@ -45,19 +45,34 @@ def download_image(image_url, save_path):
         return save_path
     return None
 
-def clean_article_content(content):
-    lines = content.split('\n')
+def clean_article_content(article):
+    content_section = article.find('section', class_='post-content')
+    if not content_section:
+        return "Content not found"
+    
+    elements = content_section.find_all(['p', 'h1', 'h2', 'h3', 'ul', 'ol', 'pre', 'blockquote', 'figure', 'code'])
     cleaned_lines = []
-    skip_lines = ['Share:', 'Follow:', 'Previous Post', 'Next Post']
-
-    for line in lines:
-        if any(skip in line for skip in skip_lines):
-            continue
-        if 'Linkedin' in line or 'Twitter' in line or 'Reddit' in line or 'Copy Article Link' in line or 'Email Article' in line:
-            continue
-        cleaned_lines.append(line.strip())
-
-    return '\n'.join(cleaned_lines).strip()
+    
+    for element in elements:
+        if element.name in ['ul', 'ol']:
+            items = [f"* {li.get_text(strip=True)}" for li in element.find_all('li')]
+            cleaned_lines.extend(items)
+        elif element.name == 'pre':
+            code = element.get_text(strip=True)
+            cleaned_lines.append(f"```\n{code}\n```")
+        elif element.name == 'blockquote':
+            quote = element.get_text(strip=True)
+            cleaned_lines.append(f"> {quote}")
+        elif element.name == 'figure' and element.find('img'):
+            img_url = element.find('img')['src']
+            cleaned_lines.append(f"![Image]({img_url})")
+        elif element.name == 'code':
+            code = element.get_text(strip=True)
+            cleaned_lines.append(f"`{code}`")
+        else:
+            cleaned_lines.append(element.get_text(strip=True))
+    
+    return '\n\n'.join(cleaned_lines).strip()
 
 def update_readme_and_articles(articles_df):
     if not os.path.exists('articles'):
@@ -92,22 +107,21 @@ def update_readme_and_articles(articles_df):
         new_content += f"| {row['index']} | {row['title']} | {row['author']} | {row['summary']} | {row['date']} | [Link]({ensure_absolute_url(row['url'])}) |\n"
 
         if row['is_new']:
-            # Ensure the URL is absolute before making a request
             absolute_url = ensure_absolute_url(row['url'])
             response = requests.get(absolute_url)
             soup = BeautifulSoup(response.content, 'html.parser')
-            article_content = soup.select_one('article').get_text(separator="\n", strip=True) if soup.select_one('article') else 'Content not found'
-            cleaned_content = clean_article_content(article_content)
+            article = soup.find('article', class_='post--full')
+            article_content = clean_article_content(article) if article else 'Content not found'
             filename = f"articles/{sanitize_title(row['title'])}.md"
 
             if row['image_url']:
                 image_url = urljoin(absolute_url, row['image_url'])
                 image_path = f"articles/images/{sanitize_title(row['title'])}.jpg"
                 download_image(image_url, image_path)
-                cleaned_content = f"![Header Image](/{image_path})\n\n{cleaned_content}"
+                article_content = f"![Header Image]({image_path})\n\n{article_content}"
 
             with open(filename, 'w') as article_file:
-                article_file.write(f"# {row['title']}\n\n{cleaned_content}\n")
+                article_file.write(f"# {row['title']}\n\n{article_content}\n")
 
     updated_readme_content = readme_content[:start_index] + '\n' + new_content + '\n' + readme_content[end_index:]
 
