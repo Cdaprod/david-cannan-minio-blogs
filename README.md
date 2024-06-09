@@ -1,4 +1,31 @@
+# David Cannan's MinIO Publications 🥳
+
+Welcome to my GitHub repository where I chronicle my journey with MinIO, exploring innovative solutions and sharing insights into the integration of MinIO with various technologies. Each article aims to educate and inspire, focusing on practical applications and advanced configurations.
+
+## About the Author
+
+I'm David Cannan, a tech enthusiast and content creator specializing in DevOps, cloud storage solutions, and AI-Ops (AI driven technologies). My professional journey is marked by a passion for building robust, scalable systems and empowering the community through knowledge sharing.
+
+## Featured Publications
+
+Here are some highlights from my collection of articles. These pieces exemplify my approach to complex problems and demonstrate my ability to convey technical concepts effectively.
+
+- **Building and Deploying a MinIO-Powered LangChain Agent API with LangServe**  
+  [Read more...](https://blog.min.io/minio-powered-langchain-agent-with-langserve/)
+- **Dynamic ETL Pipeline: Hydrate AI with Web Data for MinIO and Weaviate using Unstructured-IO**  
+  [Read more...](https://blog.min.io/minio-weaviate-unstructured-io/)
+- **Disaster Proof MinIO with GitOps**  
+  [Read more...](https://blog.min.io/disaster-proof-minio-with-gitops/)
+
 # David Cannan's MinIO Publications
+
+<!-- START_ARTICLES -->
+<!-- END_ARTICLES -->
+
+## Publication Index
+
+Here is a complete index of my work related to MinIO. Click on the links to read the articles and dive deeper into each topic.
+
 
 | No. | Title | Author | Summary | Date | Link |
 |-----|-------|--------|---------|------|------|
@@ -34,3 +61,30 @@ Read more... | 2024-01-23 | [Link](https://blog.min.io/minio-webhook-event-notif
 Read more... | 2024-01-16 | [Link](https://blog.min.io/minio-postgres-event-notifications/) |
 | 1 | Smooth Sailing from Docker to Localhost | David Cannan | Explore the integration of Dockerized MinIO with localhost Flask apps. This guide addresses Docker networking challenges, ensuring seamless MinIO and Flask communication for a development environment that closely mirrors production. Dive into practical solutions for robust workflows.
 Read more... | 2023-12-08 | [Link](https://blog.min.io/from-docker-to-localhost/) |
+
+## Technical Stack and Tools
+
+In my articles, I frequently discuss and use the following tools and technologies:
+
+- **MinIO**: Kubernetes-native S3 object storage
+- **Docker**: Containerization platform
+- **GitOps**: Automation and CI/CD practices
+- **Weaviate**: Vector databases and stores
+- **LangChain and OpenAI**: Leveraging AI for enhanced data processing
+
+## Contributions and Contact
+
+I'm always open to collaborations and contributions. If you're interested in contributing to this repository or have suggestions for topics, please feel free to [open an issue](https://github.com/cdaprod/david-cannan-minio-blogs/issues) or submit a pull request.
+
+For direct contact, you can reach me via:
+
+- **LinkedIn**: [David Cannan](https://linkedin.com/in/cdasmkt)
+- **Email**: cdaprod@cdaprod.dev
+
+## Updates and Maintenance
+
+This repository is updated regularly as new publications are released. Check back often for the latest articles and insights.
+
+## Acknowledgments
+
+Special thanks to all my colleagues at MinIO and the tech community for their support and insights that have significantly influenced this work.

@@ -5,6 +5,7 @@ from datetime import datetime
 import pytz
 import os
 import re
+from urllib.parse import urljoin
 
 # Constants
 AUTHOR = 'David Cannan'
@@ -20,7 +21,8 @@ def fetch_and_parse_articles():
         summary = article.select_one('.post__content').text.strip() if article.select_one('.post__content') else 'Summary not available'
         date = article.find('time')['datetime'].strip() if article.find('time') else 'Date not available'
         link = article.select_one('a[href]')['href'] if article.select_one('a[href]') else 'URL not available'
-        articles.append({"title": title, "author": AUTHOR, "summary": summary, "date": date, "url": link})
+        image_url = article.select_one('img')['src'] if article.select_one('img') else None
+        articles.append({"title": title, "author": AUTHOR, "summary": summary, "date": date, "url": link, "image_url": image_url})
 
     df = pd.DataFrame(articles)
     df['index'] = range(len(df), 0, -1)  # Add a reverse index starting from the total number of articles
@@ -34,9 +36,35 @@ def ensure_absolute_url(url):
         return url
     return 'https://blog.min.io' + url
 
+def download_image(image_url, save_path):
+    response = requests.get(image_url, stream=True)
+    if response.status_code == 200:
+        with open(save_path, 'wb') as f:
+            for chunk in response.iter_content(1024):
+                f.write(chunk)
+        return save_path
+    return None
+
+def clean_article_content(content):
+    lines = content.split('\n')
+    cleaned_lines = []
+    skip_lines = ['Share:', 'Follow:', 'Previous Post', 'Next Post']
+
+    for line in lines:
+        if any(skip in line for skip in skip_lines):
+            continue
+        if 'Linkedin' in line or 'Twitter' in line or 'Reddit' in line or 'Copy Article Link' in line or 'Email Article' in line:
+            continue
+        cleaned_lines.append(line.strip())
+
+    return '\n'.join(cleaned_lines).strip()
+
 def update_readme_and_articles(articles_df):
     if not os.path.exists('articles'):
         os.makedirs('articles')
+
+    if not os.path.exists('articles/images'):
+        os.makedirs('articles/images')
 
     existing_urls = []
     if os.path.exists('README.md'):
@@ -46,21 +74,45 @@ def update_readme_and_articles(articles_df):
     articles_df['is_new'] = ~articles_df['url'].isin(existing_urls)
     
     # Update README.md
-    with open('README.md', 'w') as f:
-        f.write("# David Cannan's MinIO Publications\n\n")
-        f.write("| No. | Title | Author | Summary | Date | Link |\n")
-        f.write("|-----|-------|--------|---------|------|------|\n")
-        for index, row in articles_df.iterrows():
-            f.write(f"| {row['index']} | {row['title']} | {row['author']} | {row['summary']} | {row['date']} | [Link]({ensure_absolute_url(row['url'])}) |\n")
+    with open('README.md', 'r') as f:
+        readme_content = f.read()
 
-            if row['is_new']:
-                # Ensure the URL is absolute before making a request
-                absolute_url = ensure_absolute_url(row['url'])
-                response = requests.get(absolute_url)
-                article_content = BeautifulSoup(response.content, 'html.parser').select_one('article').get_text(separator="\n", strip=True) if BeautifulSoup(response.content, 'html.parser').select_one('article') else 'Content not found'
-                filename = f"articles/{sanitize_title(row['title'])}.md"
-                with open(filename, 'w') as article_file:
-                    article_file.write(f"# {row['title']}\n\n{article_content}\n")
+    start_marker = '<!-- START_ARTICLES -->'
+    end_marker = '<!-- END_ARTICLES -->'
+    start_index = readme_content.find(start_marker) + len(start_marker)
+    end_index = readme_content.find(end_marker)
+
+    if start_index == -1 or end_index == -1:
+        print("Markers not found in README.md")
+        return
+
+    new_content = "| No. | Title | Author | Summary | Date | Link |\n"
+    new_content += "|-----|-------|--------|---------|------|------|\n"
+    for index, row in articles_df.iterrows():
+        new_content += f"| {row['index']} | {row['title']} | {row['author']} | {row['summary']} | {row['date']} | [Link]({ensure_absolute_url(row['url'])}) |\n"
+
+        if row['is_new']:
+            # Ensure the URL is absolute before making a request
+            absolute_url = ensure_absolute_url(row['url'])
+            response = requests.get(absolute_url)
+            soup = BeautifulSoup(response.content, 'html.parser')
+            article_content = soup.select_one('article').get_text(separator="\n", strip=True) if soup.select_one('article') else 'Content not found'
+            cleaned_content = clean_article_content(article_content)
+            filename = f"articles/{sanitize_title(row['title'])}.md"
+
+            if row['image_url']:
+                image_url = urljoin(absolute_url, row['image_url'])
+                image_path = f"articles/images/{sanitize_title(row['title'])}.jpg"
+                download_image(image_url, image_path)
+                cleaned_content = f"![Header Image]({image_path})\n\n{cleaned_content}"
+
+            with open(filename, 'w') as article_file:
+                article_file.write(f"# {row['title']}\n\n{cleaned_content}\n")
+
+    updated_readme_content = readme_content[:start_index] + '\n' + new_content + '\n' + readme_content[end_index:]
+
+    with open('README.md', 'w') as f:
+        f.write(updated_readme_content)
 
 if __name__ == "__main__":
     est = pytz.timezone('US/Eastern')
