@@ -1,6 +1,6 @@
 # Backing Up Weaviate with MinIO S3 Buckets
 
-![Header Image](articles/images/Backing_Up_Weaviate_with_MinIO_S3_Buckets.jpg)
+![Header Image](/articles/images/Backing_Up_Weaviate_with_MinIO_S3_Buckets.jpg)
 
 Backing Up Weaviate with MinIO S3 Buckets
 David Cannan
