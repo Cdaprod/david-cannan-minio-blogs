@@ -7,7 +7,6 @@ David Cannan
 David Cannan
 on
 AI/ML
-29 April 2024
 
 
 if os.environ.get("WEAVIATE_API_KEY", None) is None:

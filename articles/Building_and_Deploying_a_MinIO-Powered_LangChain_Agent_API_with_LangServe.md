@@ -7,7 +7,6 @@ David Cannan
 David Cannan
 on
 AI/ML
-9 April 2024
 
 
 python -m venv .myenv

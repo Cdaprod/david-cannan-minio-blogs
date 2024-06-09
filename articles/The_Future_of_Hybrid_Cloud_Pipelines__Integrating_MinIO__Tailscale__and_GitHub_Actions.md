@@ -7,7 +7,6 @@ David Cannan
 David Cannan
 on
 DevOps
-24 May 2024
 
 on:
 push:

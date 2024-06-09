@@ -7,7 +7,6 @@ David Cannan
 David Cannan
 on
 AI/ML
-30 January 2024
 
 # MinIO Configuration for the public testing server
 endpoint = 'play.min.io:9000'

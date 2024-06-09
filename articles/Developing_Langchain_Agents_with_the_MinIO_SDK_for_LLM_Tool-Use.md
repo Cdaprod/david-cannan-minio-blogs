@@ -7,7 +7,6 @@ David Cannan
 David Cannan
 on
 AI/ML
-20 February 2024
 
 llm = ChatOpenAI(api_key="")
 Setup

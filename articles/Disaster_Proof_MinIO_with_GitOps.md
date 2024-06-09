@@ -7,7 +7,6 @@ David Cannan
 David Cannan
 on
 DevOps
-19 March 2024
 
 services:
 minio:

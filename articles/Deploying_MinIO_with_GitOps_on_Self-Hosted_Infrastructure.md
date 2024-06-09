@@ -7,7 +7,6 @@ David Cannan
 David Cannan
 on
 DevOps
-5 March 2024
 
 # Download the runner package
 curl -o actions-runner-linux-arm64-<RUNNER_VERSION>.tar.gz -L <https://github.com/actions/runner/releases/download/v><RUNNER_VERSION>/actions-runner-linux-arm64-<RUNNER_VERSION>.tar.gz

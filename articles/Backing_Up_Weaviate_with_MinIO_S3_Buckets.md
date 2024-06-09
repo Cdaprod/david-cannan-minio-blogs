@@ -7,7 +7,6 @@ David Cannan
 David Cannan
 on
 AI/ML
-6 February 2024
 
 services:
 weaviate:

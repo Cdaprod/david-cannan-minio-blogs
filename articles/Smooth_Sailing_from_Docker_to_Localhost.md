@@ -7,7 +7,6 @@ David Cannan
 David Cannan
 on
 Docker
-8 December 2023
 
 app = Flask(__name__)
 

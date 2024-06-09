@@ -7,7 +7,6 @@ David Cannan
 David Cannan
 on
 Events
-16 January 2024
 
 volumes:
 - minio_data:/data
