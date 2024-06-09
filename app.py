@@ -11,6 +11,7 @@ from urllib.parse import urljoin
 AUTHOR = 'David Cannan'
 BLOG_URL = 'https://blog.min.io/author/david-cannan'
 
+# Fetch and parse articles
 def fetch_and_parse_articles():
     response = requests.get(BLOG_URL)
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -28,14 +29,17 @@ def fetch_and_parse_articles():
     df['index'] = range(len(df), 0, -1)  # Add a reverse index starting from the total number of articles
     return df
 
+# Sanitize title to create a valid filename
 def sanitize_title(title):
     return re.sub(r'[^\w\-]', '_', title)[:250]
 
+# Ensure the URL is absolute
 def ensure_absolute_url(url):
     if url.startswith('http'):
         return url
     return 'https://blog.min.io' + url
 
+# Download image
 def download_image(image_url, save_path):
     response = requests.get(image_url, stream=True)
     if response.status_code == 200:
@@ -45,13 +49,13 @@ def download_image(image_url, save_path):
         return save_path
     return None
 
+# Clean and extract article content
 def clean_article_content(article):
-    content_section = article.select_one('section.post-content')
+    content_section = article.find('section', class_='post-content')
     if not content_section:
         return "Content not found"
     
-    # Extract and clean the content
-    elements = content_section.find_all(['p', 'h1', 'h2', 'h3', 'ul', 'ol', 'pre', 'blockquote'])
+    elements = content_section.find_all(['p', 'h1', 'h2', 'h3', 'ul', 'ol', 'pre', 'blockquote', 'figure', 'code'])
     cleaned_lines = []
     
     for element in elements:
@@ -64,11 +68,18 @@ def clean_article_content(article):
         elif element.name == 'blockquote':
             quote = element.get_text(strip=True)
             cleaned_lines.append(f"> {quote}")
+        elif element.name == 'figure' and element.find('img'):
+            img_url = element.find('img')['src']
+            cleaned_lines.append(f"![Image]({img_url})")
+        elif element.name == 'code':
+            code = element.get_text(strip=True)
+            cleaned_lines.append(f"`{code}`")
         else:
             cleaned_lines.append(element.get_text(strip=True))
     
     return '\n\n'.join(cleaned_lines).strip()
 
+# Update README and save articles
 def update_readme_and_articles(articles_df):
     if not os.path.exists('articles'):
         os.makedirs('articles')
@@ -102,12 +113,11 @@ def update_readme_and_articles(articles_df):
         new_content += f"| {row['index']} | {row['title']} | {row['author']} | {row['summary']} | {row['date']} | [Link]({ensure_absolute_url(row['url'])}) |\n"
 
         if row['is_new']:
-            # Ensure the URL is absolute before making a request
             absolute_url = ensure_absolute_url(row['url'])
             response = requests.get(absolute_url)
             soup = BeautifulSoup(response.content, 'html.parser')
-            article = soup.select_one('article.post')
-            article_content = clean_article_content(article)
+            article = soup.find('article', class_='post--full')
+            article_content = clean_article_content(article) if article else 'Content not found'
             filename = f"articles/{sanitize_title(row['title'])}.md"
 
             if row['image_url']:
