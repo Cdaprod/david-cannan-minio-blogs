@@ -1,21 +1,15 @@
 # MinIO Networking with Overlay Networks
 
+![Header Image](articles/images/MinIO_Networking_with_Overlay_Networks.jpg)
+
 MinIO Networking with Overlay Networks
 David Cannan
 David Cannan
 on
 DevOps
 29 March 2024
-Share:
-Linkedin
-X (Twitter)
-Reddit
-Copy Article Link
-Email Article
-Follow:
 LinkedIn
 X
-Reddit
 The evolution of cloud computing and containerization technologies has transformed the way applications are developed, deployed, and managed. This shift has brought about significant changes in the networking landscape, introducing new challenges and opportunities for
 DevOps
 and
@@ -99,23 +93,23 @@ minio-compose.yml
 ):
 version: '3.8'
 services:
-  minio:
-    image: minio/minio:latest
-    command: server /data
-    volumes:
-      - minio-data:/data
-    networks:
-      - minio-overlay-network
-    deploy:
-      mode: global
-      placement:
-        constraints:
-          - node.role == worker
+minio:
+image: minio/minio:latest
+command: server /data
 volumes:
-  minio-data:
+- minio-data:/data
 networks:
-  minio-overlay-network:
-    external: true
+- minio-overlay-network
+deploy:
+mode: global
+placement:
+constraints:
+- node.role == worker
+volumes:
+minio-data:
+networks:
+minio-overlay-network:
+external: true
 docker compose example
 This Compose file defines the MinIO service using the official MinIO Docker image, attaches it to the minio-overlay-network overlay network, and specifies a global deployment mode to run one instance of the service on each worker node in the docker cluster.
 Step 3: Deploy the MinIO Stack
@@ -141,41 +135,41 @@ Additionally, you can use the docker network inspect command to retrieve specifi
 This command will display comprehensive details about the overlay network, including its configuration, connected containers, and network endpoints.
 Example output:
 [
-    {
-        "Name": "minio-overlay-network",
-        "Id": "nvk9xhel1f1qs1nuzf2trbiv1",
-        "Created": "2023-06-03T15:30:00.123456789Z",
-        "Scope": "swarm",
-        "Driver": "overlay",
-        "EnableIPv6": false,
-        "IPAM": {
-            "Driver": "default",
-            "Options": null,
-            "Config": [
-                {
-                    "Subnet": "10.0.1.0/24",
-                    "Gateway": "10.0.1.1"
-                }
-            ]
-        },
-        "Containers": {
-            "0e1f2d3c4b5a": {
-                "Name": "minio_service.1.abc123def456",
-                "EndpointID": "1a2b3c4d5e6f",
-                "MacAddress": "02:42:0a:00:01:03",
-                "IPv4Address": "10.0.1.3/24",
-                "IPv6Address": ""
-            },
-            ...
-        },
-        "Options": {
-            "com.docker.network.driver.overlay.vxlanid_list": "4097"
-        },
-        "Labels": {},
-        "Peers": [
-            ...
-        ]
-    }
+{
+"Name": "minio-overlay-network",
+"Id": "nvk9xhel1f1qs1nuzf2trbiv1",
+"Created": "2023-06-03T15:30:00.123456789Z",
+"Scope": "swarm",
+"Driver": "overlay",
+"EnableIPv6": false,
+"IPAM": {
+"Driver": "default",
+"Options": null,
+"Config": [
+{
+"Subnet": "10.0.1.0/24",
+"Gateway": "10.0.1.1"
+}
+]
+},
+"Containers": {
+"0e1f2d3c4b5a": {
+"Name": "minio_service.1.abc123def456",
+"EndpointID": "1a2b3c4d5e6f",
+"MacAddress": "02:42:0a:00:01:03",
+"IPv4Address": "10.0.1.3/24",
+"IPv6Address": ""
+},
+...
+},
+"Options": {
+"com.docker.network.driver.overlay.vxlanid_list": "4097"
+},
+"Labels": {},
+"Peers": [
+...
+]
+}
 ]
 Output: docker network inspect
 The output provides valuable information about the minio-overlay-network, including:
@@ -224,9 +218,9 @@ docker service ps minio_service
 List the service process status
 Expected Outcome:
 ID             NAME                IMAGE          NODE      DESIRED STATE   CURRENT STATE           ERROR   PORTS
-def456abc123   minio_service.1     minio/minio    node1     Running         Running 5 minutes ago           
-ghi789jkl012   minio_service.2     minio/minio    node2     Running         Running 5 minutes ago           
-jkl012mno345   minio_service.3     minio/minio    node3     Running         Running 5 minutes ago           
+def456abc123   minio_service.1     minio/minio    node1     Running         Running 5 minutes ago
+ghi789jkl012   minio_service.2     minio/minio    node2     Running         Running 5 minutes ago
+jkl012mno345   minio_service.3     minio/minio    node3     Running         Running 5 minutes ago
 mno345pqr678   minio_service.4     minio/minio    node4     Running         Running 5 minutes ago
 The output shows the details of each replica of the MinIO service, indicating that they are up and running on different nodes in the Docker cluster.
 Access MinIO Web Console:
@@ -246,8 +240,8 @@ docker service update --network-add minio-overlay-network <service-id>
 docker service update --network-add
 Expected Outcome:
 <service-id>
-overall progress: 1 out of 1 tasks 
-1/1: running   
+overall progress: 1 out of 1 tasks
+1/1: running
 verify: Service converged
 If a service is mistakenly attached to a network, you can remove it from that network with the --network-rm command:
 docker service update --network-rm minio-overlay-network <service-id>
@@ -272,8 +266,6 @@ Slack
 or
 hello@min.io
 .
-Previous Post
-Next Post
 S3 Select
 Security
 Modern Data Lakes

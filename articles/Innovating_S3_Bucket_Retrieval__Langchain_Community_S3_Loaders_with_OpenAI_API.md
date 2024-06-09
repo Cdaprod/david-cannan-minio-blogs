@@ -1,21 +1,15 @@
 # Innovating S3 Bucket Retrieval: Langchain Community S3 Loaders with OpenAI API
 
+![Header Image](articles/images/Innovating_S3_Bucket_Retrieval__Langchain_Community_S3_Loaders_with_OpenAI_API.jpg)
+
 Innovating S3 Bucket Retrieval: Langchain Community S3 Loaders with OpenAI API
 David Cannan
 David Cannan
 on
 AI/ML
 30 January 2024
-Share:
-Linkedin
-X (Twitter)
-Reddit
-Copy Article Link
-Email Article
-Follow:
 LinkedIn
 X
-Reddit
 In the rapidly evolving world of data storage and processing, combining efficient cloud storage solutions with advanced AI capabilities presents a transformative approach to handling vast volumes of data. This article demonstrates a practical implementation using MinIO, Langchain and OpenAI’s GPT-3.5 model, focusing on summarizing documents stored in MinIO buckets.
 The Power of MinIO
 MinIO is open-source, high-performance object storage that is fully compatible with the Amazon S3 API. Known for its scalability, MinIO is ideal for storing unstructured data such as photos, videos, log files, backups and container images. It’s not just about storage; MinIO also offers features like data replication, lifecycle management and high availability, making it a top choice for modern cloud-native applications.
@@ -50,12 +44,12 @@ use_ssl = True
 
 # Initialize and load a single document
 file_loader = S3FileLoader(
-    bucket='web-documentation',
-    key='MinIO_Quickstart.md',
-    endpoint_url=f'http{"s" if use_ssl else ""}://{endpoint}',
-    aws_access_key_id=access_key,
-    aws_secret_access_key=secret_key,
-    use_ssl=use_ssl
+bucket='web-documentation',
+key='MinIO_Quickstart.md',
+endpoint_url=f'http{"s" if use_ssl else ""}://{endpoint}',
+aws_access_key_id=access_key,
+aws_secret_access_key=secret_key,
+use_ssl=use_ssl
 )
 
 document = file_loader.load()
@@ -65,12 +59,12 @@ from langchain_community.document_loaders.s3_directory import S3DirectoryLoader
 
 # Initialize and load documents
 directory_loader = S3DirectoryLoader(
-    bucket='web-documentation',
-    prefix='',
-    endpoint_url=f'http{"s" if use_ssl else ""}://{endpoint}',
-    aws_access_key_id=access_key, 
-    aws_secret_access_key=secret_key, 
-    use_ssl=use_ssl
+bucket='web-documentation',
+prefix='',
+endpoint_url=f'http{"s" if use_ssl else ""}://{endpoint}',
+aws_access_key_id=access_key,
+aws_secret_access_key=secret_key,
+use_ssl=use_ssl
 )
 
 documents = directory_loader.load()
@@ -95,23 +89,23 @@ os.environ['OPENAI_API_KEY'] = 'your-openai-api-key'
 model = ChatOpenAI(temperature=0, model="gpt-3.5-turbo-1106")
 
 prompt = ChatPromptTemplate.from_template(
-    "Summarize the following document '{document_name}':{context}Please provide the summary and key points."
+"Summarize the following document '{document_name}':{context}Please provide the summary and key points."
 )
 
 loaded_documents = [documents, document]  # From S3 Loaders
-flattened_documents = [doc for sublist in loaded_documents for doc in sublist] 
+flattened_documents = [doc for sublist in loaded_documents for doc in sublist]
 
 for loaded_document in flattened_documents:
-    document_text = loaded_document.page_content
-    document_name = getattr(loaded_document, 'name', 'Unknown Document')  # Assuming each document has a 'name' attribute
-    chain = (
-        RunnableLambda(lambda x: {"context": document_text, "document_name": document_name})
-        | prompt
-        | model
-        | StrOutputParser()
-    )
-    summary = chain.invoke(None)
-    print("Summary:", summary)
+document_text = loaded_document.page_content
+document_name = getattr(loaded_document, 'name', 'Unknown Document')  # Assuming each document has a 'name' attribute
+chain = (
+RunnableLambda(lambda x: {"context": document_text, "document_name": document_name})
+| prompt
+| model
+| StrOutputParser()
+)
+summary = chain.invoke(None)
+print("Summary:", summary)
 Python Langchain Example - Summarizing Documents with OpenAI API
 Below is the output from running this demo, and is a result of integrating LangChain with OpenAI’s GPT-3.5 and MinIO S3 storage; the output has been shortened for demonstrative purposes:
 Summary: The document is a quickstart guide for MinIO, a high-performance object storage system that is compatible with Amazon S3. It explains how to run MinIO on bare metal hardware or in containers. For Kubernetes environments, it recommends using the MinIO Kubernetes Operator. The key points are:
@@ -150,8 +144,6 @@ MinIO
 continues to play a key role in your AI/ML journey. Reach out to us on
 Slack
 and share your insights and discoveries!
-Previous Post
-Next Post
 S3 Select
 Security
 Modern Data Lakes

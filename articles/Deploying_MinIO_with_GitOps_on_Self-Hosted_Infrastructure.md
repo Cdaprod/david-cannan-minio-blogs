@@ -1,21 +1,15 @@
 # Deploying MinIO with GitOps on Self-Hosted Infrastructure
 
+![Header Image](articles/images/Deploying_MinIO_with_GitOps_on_Self-Hosted_Infrastructure.jpg)
+
 Deploying MinIO with GitOps on Self-Hosted Infrastructure
 David Cannan
 David Cannan
 on
 DevOps
 5 March 2024
-Share:
-Linkedin
-X (Twitter)
-Reddit
-Copy Article Link
-Email Article
-Follow:
 LinkedIn
 X
-Reddit
 Building on the insights from the
 MinIO Weaviate Python GitOps
 exploration, this article ventures into enhancing automation for software deployment processes.
@@ -146,34 +140,34 @@ directory, for example,
 name: Deploy MinIO on RPI Swarm
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
+push:
+branches:
+- main
+pull_request:
 
 jobs:
-  deploy-minio:
-    name: Deploy MinIO to RPI Swarm
-    runs-on: [self-hosted, rpi-swarm]
+deploy-minio:
+name: Deploy MinIO to RPI Swarm
+runs-on: [self-hosted, rpi-swarm]
 
-    steps:
-    - name: Check out repository code
-      uses: actions/checkout@v2
+steps:
+- name: Check out repository code
+uses: actions/checkout@v2
 
-    - name: Load Docker Compose File
-      run: |
-        echo "Loading Docker Compose for MinIO Deployment..."
-        docker-compose -f docker-compose.yml config
+- name: Load Docker Compose File
+run: |
+echo "Loading Docker Compose for MinIO Deployment..."
+docker-compose -f docker-compose.yml config
 
-    - name: Deploy MinIO Stack
-      run: |
-        echo "Deploying MinIO on RPI Swarm..."
-        docker stack deploy -c docker-compose.yml minio_stack
+- name: Deploy MinIO Stack
+run: |
+echo "Deploying MinIO on RPI Swarm..."
+docker stack deploy -c docker-compose.yml minio_stack
 
-    - name: Verify Deployment
-      run: |
-        echo "Verifying MinIO Deployment..."
-        docker service ls | grep minio_stack
+- name: Verify Deployment
+run: |
+echo "Verifying MinIO Deployment..."
+docker service ls | grep minio_stack
 This workflow exemplifies how to utilize a GitHub Actions self-hosted runner for deploying applications like MinIO to a Docker Swarm setup, demonstrating the runner's ability to facilitate complex CI/CD tasks beyond simple tests.
 name:
 Identifies the workflow, here named "Deploy MinIO on RPI Swarm".
@@ -203,8 +197,6 @@ The flexibility that GitOps introduces into application development is another s
 We encourage our fellow developers and engineers to dive into this journey with us, explore the potentials, and share their insights and queries. For deeper conversations, collaborations, or queries, feel free to reach out to us on the
 MinIO Slack channel
 . Together, let’s shape the future of deployment practices, leveraging our collective expertise and the powerful capabilities of MinIO and GitOps.
-Previous Post
-Next Post
 S3 Select
 Security
 Modern Data Lakes

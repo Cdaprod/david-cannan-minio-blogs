@@ -1,21 +1,15 @@
 # Dynamic ETL Pipeline: Hydrate AI with Web Data for MinIO and Weaviate using Unstructured-IO
 
+![Header Image](articles/images/Dynamic_ETL_Pipeline__Hydrate_AI_with_Web_Data_for_MinIO_and_Weaviate_using_Unstructured-IO.jpg)
+
 Dynamic ETL Pipeline: Hydrate AI with Web Data for MinIO and Weaviate using Unstructured-IO
 David Cannan
 David Cannan
 on
 AI/ML
 27 February 2024
-Share:
-Linkedin
-X (Twitter)
-Reddit
-Copy Article Link
-Email Article
-Follow:
 LinkedIn
 X
-Reddit
 In modern-day data-driven landscapes, the web is an endless source of information, offering vast potential for insight and innovation. However, the challenge lies in extracting, structuring, and analyzing this vast sea of data to make it actionable. This is where the innovation of
 Unstructured-IO
 , combined with the robust capabilities of MinIO’s object storage and Weaviate’s AI and metadata functionalities, steps in. Together, they create a dynamic ETL pipeline capable of transforming unstructured web data into a structured, analyzable format.
@@ -319,8 +313,6 @@ If you’ve been inspired by the possibilities of Dynamic ETL, intrigued by the 
 Reach out to us on
 Slack
 and drop us a message. Let’s continue this conversation and together, shape the future of data management!
-Previous Post
-Next Post
 S3 Select
 Security
 Modern Data Lakes

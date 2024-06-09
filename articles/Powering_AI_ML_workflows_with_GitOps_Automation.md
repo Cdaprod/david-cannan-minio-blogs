@@ -1,21 +1,15 @@
 # Powering AI/ML workflows with GitOps Automation
 
+![Header Image](articles/images/Powering_AI_ML_workflows_with_GitOps_Automation.jpg)
+
 Powering AI/ML workflows with GitOps Automation
 David Cannan
 David Cannan
 on
 AI/ML
 13 February 2024
-Share:
-Linkedin
-X (Twitter)
-Reddit
-Copy Article Link
-Email Article
-Follow:
 LinkedIn
 X
-Reddit
 As a developer deeply entrenched in the world of automation and AI, we've come to appreciate the remarkable synergy between cutting-edge tools and methodologies that push the boundaries of what's possible. In this exploration, we want to share a concept that has not only revolutionized our approach to software development and infrastructure management but has also opened the door to endless innovation: GitOps. This paradigm harnesses the power of Git as the cornerstone of operational excellence, has been a game-changer in our toolkit and sets the stage for
 limitless
 possibilities.
@@ -65,8 +59,8 @@ repository folder:
 │   └── python_initializer.py
 ├── docker-compose.yaml
 └── minio
-    ├── Dockerfile
-    └── entrypoint.sh
+├── Dockerfile
+└── entrypoint.sh
 Directory tree
 Essentially, close this repo and add these files to a GitHub repository of your own as demonstrated in the above directory-tree. It will automatically run via GitHub under the specific repository’s “
 Actions
@@ -562,8 +556,6 @@ We look forward to being a part of your journey in exploring these advanced solu
 Slack
 if you have any questions or just to say hello.
 Here's to building the future, one line of code at a time!
-Previous Post
-Next Post
 S3 Select
 Security
 Modern Data Lakes

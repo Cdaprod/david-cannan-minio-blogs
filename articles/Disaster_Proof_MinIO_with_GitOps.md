@@ -1,21 +1,15 @@
 # Disaster Proof MinIO with GitOps
 
+![Header Image](articles/images/Disaster_Proof_MinIO_with_GitOps.jpg)
+
 Disaster Proof MinIO with GitOps
 David Cannan
 David Cannan
 on
 DevOps
 19 March 2024
-Share:
-Linkedin
-X (Twitter)
-Reddit
-Copy Article Link
-Email Article
-Follow:
 LinkedIn
 X
-Reddit
 Imagine you've spent countless hours perfecting your
 Docker Swarm setup
 , carefully crafting each service, and tuning your CI/CD pipelines for seamless automation. Now, picture this finely tuned system being reset to square one, not by a critical failure or a security breach, but by the innocent curiosity of a datacenter engineer pressing the magical
@@ -73,21 +67,21 @@ file contains service definitions like this:
 version: '3.8'
 
 services:
-  minio:
-    image: cdaprod/cda-minio:latest
-    # Other configurations ...
+minio:
+image: cdaprod/cda-minio:latest
+# Other configurations ...
 
- weaviate:
-    image: cdaprod/cda-weaviate:latest
-    # Other configurations ...
+weaviate:
+image: cdaprod/cda-weaviate:latest
+# Other configurations ...
 
- nginx:
-    image: cdaprod/cda-nginx:latest
-    # Other configurations ...
+nginx:
+image: cdaprod/cda-nginx:latest
+# Other configurations ...
 
 networks:
-  app_network:
-    driver: overlay
+app_network:
+driver: overlay
 
 # Other definitions like volumes and secrets…
 This approach significantly simplifies our deployment strategy by decoupling the image building and service deployment processes. It also means we do not need multiple docker-compose files for different environments or scenarios.
@@ -147,11 +141,11 @@ mc alias set myminio http://localhost:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSW
 
 # Before creating buckets, check if they already exist
 if ! mc ls myminio/weaviate-backups; then
-  mc mb myminio/weaviate-backups
+mc mb myminio/weaviate-backups
 fi
 
 if ! mc ls myminio/cda-datasets; then
-  mc mb myminio/cda-datasets
+mc mb myminio/cda-datasets
 fi
 
 # Keep the container running
@@ -187,44 +181,44 @@ branch to ensure that the latest code commits result in updated Docker images.
 name: Build and Push Docker Images
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+push:
+branches: [main]
+pull_request:
+branches: [main]
 
 jobs:
-  build-and-push:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+build-and-push:
+runs-on: ubuntu-latest
+steps:
+- name: Checkout code
+uses: actions/checkout@v3
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+- name: Set up Docker Buildx
+uses: docker/setup-buildx-action@v2
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+- name: Login to Docker Hub
+uses: docker/login-action@v2
+with:
+username: ${{ secrets.DOCKERHUB_USERNAME }}
+password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Build and push custom MinIO image
-      uses: docker/build-push-action@v3
-      with:
-        context: ./minio
-        file: ./minio/Dockerfile
-        push: true
-        tags: cdaprod/cda-minio:latest
-        platforms: linux/amd64,linux/arm64
+- name: Build and push custom MinIO image
+uses: docker/build-push-action@v3
+with:
+context: ./minio
+file: ./minio/Dockerfile
+push: true
+tags: cdaprod/cda-minio:latest
+platforms: linux/amd64,linux/arm64
 
-    - name: Build and push custom Weaviate image
-      uses: docker/build-push-action@v3
-      with:
-        context: ./weaviate
-        file: ./weaviate/Dockerfile
-        push: true
-        tags: cdaprod/cda-weaviate:latest
-        platforms: linux/amd64,linux/arm64
+- name: Build and push custom Weaviate image
+uses: docker/build-push-action@v3
+with:
+context: ./weaviate
+file: ./weaviate/Dockerfile
+push: true
+tags: cdaprod/cda-weaviate:latest
+platforms: linux/amd64,linux/arm64
 Builds containerized images and pushes to Docker Hub
 The job build-and-push executes on the latest Ubuntu runner provided by GitHub Actions. The workflow comprises of the following steps:
 Checkout code:
@@ -259,33 +253,33 @@ workflow completes successfully on the main branch.
 name: Deploy Services
 
 on:
-  workflow_run:
-    workflows: ["Build and Push Docker Images"]
-    branches: [main]
-    types:
-      - completed
-  workflow_dispatch:
+workflow_run:
+workflows: ["Build and Push Docker Images"]
+branches: [main]
+types:
+- completed
+workflow_dispatch:
 
 jobs:
-  deploy:
-    runs-on: self-hosted
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+deploy:
+runs-on: self-hosted
+if: ${{ github.event.workflow_run.conclusion == 'success' }}
+steps:
+- name: Checkout Repository
+uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+- name: Set up Docker Buildx
+uses: docker/setup-buildx-action@v2
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+- name: Log in to Docker Hub
+uses: docker/login-action@v1
+with:
+username: ${{ secrets.DOCKERHUB_USERNAME }}
+password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Deploy to Docker Swarm
-        run: |
-          docker stack deploy -c docker-compose.yaml cda_stack
+- name: Deploy to Docker Swarm
+run: |
+docker stack deploy -c docker-compose.yaml cda_stack
 Deploys using docker-compose.yaml after successful “Build and Push Docker Images” workflow
 Checkout Repository:
 Similar to the build workflow, it starts by checking out the code.
@@ -327,8 +321,6 @@ By codifying our infrastructure and treating it with the same care and attention
 Reach out to us on
 Slack
 and drop us a message. Let’s continue this conversation together!
-Previous Post
-Next Post
 S3 Select
 Security
 Modern Data Lakes

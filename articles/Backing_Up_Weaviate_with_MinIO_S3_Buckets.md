@@ -1,21 +1,15 @@
 # Backing Up Weaviate with MinIO S3 Buckets
 
+![Header Image](articles/images/Backing_Up_Weaviate_with_MinIO_S3_Buckets.jpg)
+
 Backing Up Weaviate with MinIO S3 Buckets
 David Cannan
 David Cannan
 on
 AI/ML
 6 February 2024
-Share:
-Linkedin
-X (Twitter)
-Reddit
-Copy Article Link
-Email Article
-Follow:
 LinkedIn
 X
-Reddit
 Weaviate is a pioneering, open-source vector database, designed to enhance semantic search through the utilization of machine learning models. Unlike traditional search engines that rely on keyword matching, Weaviate employs semantic similarity principles. This innovative approach transforms various forms of data
 (texts, images, and more)
 into vector representations, numerical forms that capture the essence of the data’s context and meaning. By analyzing the similarities between these vectors, Weaviate delivers search results that truly understand the user’s intent, offering a significant leap beyond the limitations of keyword-based searches.
@@ -60,23 +54,23 @@ provided below outlines the setup for Weaviate.
 version: '3.8'
 
 services:
-  weaviate:
-    container_name: weaviate_server
-    image: semitechnologies/weaviate:latest
-    ports:
-      - "8080:8080"
-    environment:
-      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
-      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
-      ENABLE_MODULES: 'backup-s3'
-      BACKUP_S3_BUCKET: 'weaviate-backups'
-      BACKUP_S3_ENDPOINT: 'play.min.io:443'
-      BACKUP_S3_ACCESS_KEY_ID: 'minioadmin'
-      BACKUP_S3_SECRET_ACCESS_KEY: 'minioadmin'
-      BACKUP_S3_USE_SSL: 'true'
-      CLUSTER_HOSTNAME: 'node1'
-    volumes:
-      - ./weaviate/data:/var/lib/weaviate
+weaviate:
+container_name: weaviate_server
+image: semitechnologies/weaviate:latest
+ports:
+- "8080:8080"
+environment:
+AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
+ENABLE_MODULES: 'backup-s3'
+BACKUP_S3_BUCKET: 'weaviate-backups'
+BACKUP_S3_ENDPOINT: 'play.min.io:443'
+BACKUP_S3_ACCESS_KEY_ID: 'minioadmin'
+BACKUP_S3_SECRET_ACCESS_KEY: 'minioadmin'
+BACKUP_S3_USE_SSL: 'true'
+CLUSTER_HOSTNAME: 'node1'
+volumes:
+- ./weaviate/data:/var/lib/weaviate
 Docker-Compose: Deploy Weaviate with
 backups-s3
 module enabled and
@@ -206,27 +200,27 @@ client = weaviate.Client("http://localhost:8080")
 # Schema classes to be created
 
 schema = {
-  "classes": [
-    {
-      "class": "Article",
-      "description": "A class to store articles",
-      "properties": [
-        {"name": "title", "dataType": ["string"], "description": "The title of the article"},
-        {"name": "content", "dataType": ["text"], "description": "The content of the article"},
-        {"name": "datePublished", "dataType": ["date"], "description": "The date the article was published"},
-        {"name": "url", "dataType": ["string"], "description": "The URL of the article"},
-        {"name": "customEmbeddings", "dataType": ["number[]"], "description": "Custom vector embeddings of the article"}
-      ]
-    },
-    {
-      "class": "Author",
-      "description": "A class to store authors",
-      "properties": [
-        {"name": "name", "dataType": ["string"], "description": "The name of the author"},
-        {"name": "articles", "dataType": ["Article"], "description": "The articles written by the author"}
-      ]
-    }
-  ]
+"classes": [
+{
+"class": "Article",
+"description": "A class to store articles",
+"properties": [
+{"name": "title", "dataType": ["string"], "description": "The title of the article"},
+{"name": "content", "dataType": ["text"], "description": "The content of the article"},
+{"name": "datePublished", "dataType": ["date"], "description": "The date the article was published"},
+{"name": "url", "dataType": ["string"], "description": "The URL of the article"},
+{"name": "customEmbeddings", "dataType": ["number[]"], "description": "Custom vector embeddings of the article"}
+]
+},
+{
+"class": "Author",
+"description": "A class to store authors",
+"properties": [
+{"name": "name", "dataType": ["string"], "description": "The name of the author"},
+{"name": "articles", "dataType": ["Article"], "description": "The articles written by the author"}
+]
+}
+]
 }
 client.schema.delete_class('Article')
 client.schema.delete_class('Author')
@@ -237,57 +231,57 @@ After defining the schema, the notebook guides through initializing the Weaviate
 # JSON data to be Ingested
 
 data = [
-    {
-        "class": "Article",
-        "properties": {
-            "title": "LangChain: OpenAI + S3 Loader",
-            "content": "This article discusses the integration of LangChain with OpenAI and S3 Loader...",
-            "url": "https://blog.min.io/langchain-openai-s3-loader/",
-            "customEmbeddings": [0.4, 0.3, 0.2, 0.1]
-        }
-    },
-    {
-        "class": "Article",
-        "properties": {
-            "title": "MinIO Webhook Event Notifications",
-            "content": "Exploring the webhook event notification system in MinIO...",
-            "url": "https://blog.min.io/minio-webhook-event-notifications/",
-            "customEmbeddings": [0.1, 0.2, 0.3, 0.4]
-        }
-    },
-    {
-        "class": "Article",
-        "properties": {
-            "title": "MinIO Postgres Event Notifications",
-            "content": "An in-depth look at Postgres event notifications in MinIO...",
-            "url": "https://blog.min.io/minio-postgres-event-notifications/",
-            "customEmbeddings": [0.3, 0.4, 0.1, 0.2]
-        }
-    },
-    {
-        "class": "Article",
-        "properties": {
-            "title": "From Docker to Localhost",
-            "content": "A guide on transitioning from Docker to localhost environments...",
-            "url": "https://blog.min.io/from-docker-to-localhost/",
-            "customEmbeddings": [0.4, 0.1, 0.2, 0.3]
-        }
-    }
+{
+"class": "Article",
+"properties": {
+"title": "LangChain: OpenAI + S3 Loader",
+"content": "This article discusses the integration of LangChain with OpenAI and S3 Loader...",
+"url": "https://blog.min.io/langchain-openai-s3-loader/",
+"customEmbeddings": [0.4, 0.3, 0.2, 0.1]
+}
+},
+{
+"class": "Article",
+"properties": {
+"title": "MinIO Webhook Event Notifications",
+"content": "Exploring the webhook event notification system in MinIO...",
+"url": "https://blog.min.io/minio-webhook-event-notifications/",
+"customEmbeddings": [0.1, 0.2, 0.3, 0.4]
+}
+},
+{
+"class": "Article",
+"properties": {
+"title": "MinIO Postgres Event Notifications",
+"content": "An in-depth look at Postgres event notifications in MinIO...",
+"url": "https://blog.min.io/minio-postgres-event-notifications/",
+"customEmbeddings": [0.3, 0.4, 0.1, 0.2]
+}
+},
+{
+"class": "Article",
+"properties": {
+"title": "From Docker to Localhost",
+"content": "A guide on transitioning from Docker to localhost environments...",
+"url": "https://blog.min.io/from-docker-to-localhost/",
+"customEmbeddings": [0.4, 0.1, 0.2, 0.3]
+}
+}
 ]
 
 for item in data:
-    client.data_object.create(
-        data_object=item["properties"],
-        class_name=item["class"]
-    )
+client.data_object.create(
+data_object=item["properties"],
+class_name=item["class"]
+)
 Python: index data by class
 4. Creating a Backup
 With the data indexed, the focus shifts to preserving the state of the database through backups. This part of the notebook shows how to trigger a backup operation to MinIO.
 result = client.backup.create(
-  backup_id="backup-id",
-  backend="s3",
-  include_classes=["Article", "Author"],  # specify classes to include or omit this for all classes
-  wait_for_completion=True,
+backup_id="backup-id",
+backend="s3",
+include_classes=["Article", "Author"],  # specify classes to include or omit this for all classes
+wait_for_completion=True,
 )
 print(result)
 Python: create backup
@@ -301,9 +295,9 @@ client.schema.delete_class("Author")
 6. Restoring the Backup
 This section explains how to restore the previously backed-up data, bringing the database back to a known good state.
 result = client.backup.restore(
-  backup_id="backup-id",
-  backend="s3",
-  wait_for_completion=True,
+backup_id="backup-id",
+backend="s3",
+wait_for_completion=True,
 )
 
 print(result)
@@ -316,16 +310,16 @@ This part of the notebook provides an example of implementing error handling dur
 from weaviate.exceptions import BackupFailedError
 
 try:
-    result = client.backup.restore(
-        backup_id="backup-id",
-        backend="s3",
-        wait_for_completion=True,
-    )
-    print("Backup restored successfully:", result)
+result = client.backup.restore(
+backup_id="backup-id",
+backend="s3",
+wait_for_completion=True,
+)
+print("Backup restored successfully:", result)
 
 except BackupFailedError as e:
-    print("Backup restore failed with error:", e)
-    # Here you can add logic to handle the failure, such as retrying the operation or logging the error.
+print("Backup restore failed with error:", e)
+# Here you can add logic to handle the failure, such as retrying the operation or logging the error.
 Expect:
 Backup restored successfully: {'backend': 's3', 'classes': ['Author', 'Article'], 'id': 'backup-id', 'path': 's3://weaviate-backups/backup-id', 'status': 'SUCCESS'}
 Successful Backup Restoration
@@ -357,27 +351,27 @@ here
 .
 schema.json
 {
-  "classes": [
-    {
-      "class": "Article",
-      "description": "A class to store articles",
-      "properties": [
-        {"name": "title", "dataType": ["string"], "description": "The title of the article"},
-        {"name": "content", "dataType": ["text"], "description": "The content of the article"},
-        {"name": "datePublished", "dataType": ["date"], "description": "The date the article was published"},
-        {"name": "url", "dataType": ["string"], "description": "The URL of the article"},
-        {"name": "customEmbeddings", "dataType": ["number[]"], "description": "Custom vector embeddings of the article"}
-      ]
-    },
-    {
-      "class": "Author",
-      "description": "A class to store authors",
-      "properties": [
-        {"name": "name", "dataType": ["string"], "description": "The name of the author"},
-        {"name": "articles", "dataType": ["Article"], "description": "The articles written by the author"}
-      ]
-    }
-  ]
+"classes": [
+{
+"class": "Article",
+"description": "A class to store articles",
+"properties": [
+{"name": "title", "dataType": ["string"], "description": "The title of the article"},
+{"name": "content", "dataType": ["text"], "description": "The content of the article"},
+{"name": "datePublished", "dataType": ["date"], "description": "The date the article was published"},
+{"name": "url", "dataType": ["string"], "description": "The URL of the article"},
+{"name": "customEmbeddings", "dataType": ["number[]"], "description": "Custom vector embeddings of the article"}
+]
+},
+{
+"class": "Author",
+"description": "A class to store authors",
+"properties": [
+{"name": "name", "dataType": ["string"], "description": "The name of the author"},
+{"name": "articles", "dataType": ["Article"], "description": "The articles written by the author"}
+]
+}
+]
 }
 Example schema classes for Article and Author
 The
@@ -388,42 +382,42 @@ data.json
 file populates this schema with actual instances of data, mirroring real-world applications and scenarios. This sample data illuminates the potential of Weaviate's search capabilities, offering a hands-on experience that showcases how queries are resolved and how results are dynamically generated based on the AI's understanding of the content.
 data.json
 [
-    {
-        "class": "Article",
-        "properties": {
-            "title": "LangChain: OpenAI + S3 Loader",
-            "content": "This article discusses the integration of LangChain with OpenAI and S3 Loader...",
-            "url": "https://blog.min.io/langchain-openai-s3-loader/",
-            "customEmbeddings": [0.4, 0.3, 0.2, 0.1]
-        }
-    },
-    {
-        "class": "Article",
-        "properties": {
-            "title": "MinIO Webhook Event Notifications",
-            "content": "Exploring the webhook event notification system in MinIO...",
-            "url": "https://blog.min.io/minio-webhook-event-notifications/",
-            "customEmbeddings": [0.1, 0.2, 0.3, 0.4]
-        }
-    },
-    {
-        "class": "Article",
-        "properties": {
-            "title": "MinIO Postgres Event Notifications",
-            "content": "An in-depth look at Postgres event notifications in MinIO...",
-            "url": "https://blog.min.io/minio-postgres-event-notifications/",
-            "customEmbeddings": [0.3, 0.4, 0.1, 0.2]
-        }
-    },
-    {
-        "class": "Article",
-        "properties": {
-            "title": "From Docker to Localhost",
-            "content": "A guide on transitioning from Docker to localhost environments...",
-            "url": "https://blog.min.io/from-docker-to-localhost/",
-            "customEmbeddings": [0.4, 0.1, 0.2, 0.3]
-        }
-    }
+{
+"class": "Article",
+"properties": {
+"title": "LangChain: OpenAI + S3 Loader",
+"content": "This article discusses the integration of LangChain with OpenAI and S3 Loader...",
+"url": "https://blog.min.io/langchain-openai-s3-loader/",
+"customEmbeddings": [0.4, 0.3, 0.2, 0.1]
+}
+},
+{
+"class": "Article",
+"properties": {
+"title": "MinIO Webhook Event Notifications",
+"content": "Exploring the webhook event notification system in MinIO...",
+"url": "https://blog.min.io/minio-webhook-event-notifications/",
+"customEmbeddings": [0.1, 0.2, 0.3, 0.4]
+}
+},
+{
+"class": "Article",
+"properties": {
+"title": "MinIO Postgres Event Notifications",
+"content": "An in-depth look at Postgres event notifications in MinIO...",
+"url": "https://blog.min.io/minio-postgres-event-notifications/",
+"customEmbeddings": [0.3, 0.4, 0.1, 0.2]
+}
+},
+{
+"class": "Article",
+"properties": {
+"title": "From Docker to Localhost",
+"content": "A guide on transitioning from Docker to localhost environments...",
+"url": "https://blog.min.io/from-docker-to-localhost/",
+"customEmbeddings": [0.4, 0.1, 0.2, 0.3]
+}
+}
 ]
 Sample data containing articles
 Setting Up with curl
@@ -441,11 +435,11 @@ CURL: index
 Ensuring Data Durability: Backing Up with MinIO
 We will need to assign a unique identifier, or "backup-id". This identifier not only facilitates the precise tracking and retrieval of backup sets but also ensures that each dataset is version controlled.
 curl -X POST 'http://localhost:8080/v1/backups/s3' -H 'Content-Type:application/json' -d '{
-  "id": "backup-id",
-  "include": [
-    "Article",
-    "Author"
-  ]
+"id": "backup-id",
+"include": [
+"Article",
+"Author"
+]
 }'
 CURL: backup-s3
 Expect:
@@ -470,17 +464,17 @@ The restoration of data within the Weaviate ecosystem is facilitated through a s
 curl -X POST 'http://localhost:8080/v1/backups/s3/backup-id/restore' \
 -H 'Content-Type:application/json' \
 -d '{
-  "id": "backup-id",
-  "exclude": ["Author"]
+"id": "backup-id",
+"exclude": ["Author"]
 }'
 CURL: restore
 Expect:
 {
-  "backend": "s3",
-  "classes": ["Article"],
-  "id": "backup-id",
-  "path": "s3://weaviate-backups/backup-id",
-  "status": "SUCCESS"
+"backend": "s3",
+"classes": ["Article"],
+"id": "backup-id",
+"path": "s3://weaviate-backups/backup-id",
+"status": "SUCCESS"
 }
 Successful restoration response
 Each of these commands should be adapted based on your specific setup and requirements. You may need to modify endpoint URLs, data file paths, and other parameters as needed. Also, ensure that the necessary files (schema.json, data.json) and configurations are available in your environment.
@@ -502,8 +496,6 @@ By bringing together the advanced vector database capabilities of Weaviate with 
 We are truly inspired by the remarkable innovation that springs from the minds of dedicated and passionate developers like you. It excites us to offer our support and be part of your journey towards exploring advanced solutions and reaching new heights in your data-driven projects. Please, don't hesitate to reach out to us on
 Slack
 , whether you have questions or just want to say hello.
-Previous Post
-Next Post
 S3 Select
 Security
 Modern Data Lakes

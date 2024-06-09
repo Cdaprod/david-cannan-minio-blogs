@@ -1,21 +1,15 @@
 # Deploying Application Infrastructure with MinIO S3 and Tailscale VPN
 
+![Header Image](articles/images/Deploying_Application_Infrastructure_with_MinIO_S3_and_Tailscale_VPN.jpg)
+
 Deploying Application Infrastructure with MinIO S3 and Tailscale VPN
 David Cannan
 David Cannan
 on
 DevOps
 10 May 2024
-Share:
-Linkedin
-X (Twitter)
-Reddit
-Copy Article Link
-Email Article
-Follow:
 LinkedIn
 X
-Reddit
 In modern IT operations, Artificial Intelligence for IT Operations (AI-Ops) is transforming data management by automating tasks with advanced algorithms. MinIO and Tailscale together offer a secure, scalable, and effective infrastructure for application-layer development. Tailscale, with its WireGuard-based overlay VPN network, provides end-to-end encryption and seamless integration with identity providers, simplifying access control for securely managing connections.
 Both MinIO and Tailscale are Docker and Kubernetes native. MinIO, a perfect S3-compatible object storage solution, offers a high-performance, scalable system that seamlessly integrates into cloud-native environments. Tailscale, an ideal overlay networking solution, uses its infrastructure-agnostic VPN service to establish a secure, zero-trust network architecture, making application layer development simple and protected.
 For organizations using MinIO's S3-compatible storage, Tailscale's network tunnels ensure secure access to MinIO buckets from any location, providing a protected path across the internet. The reduced latency and high reliability from Tailscale's VPN service make it particularly useful for securely linking diverse environments.
@@ -50,9 +44,9 @@ Our directory structure conveyed in the following block represents a structure w
 ├── minio
 │   └── data (MinIO’s Persistent Directory)
 └── tailscale
-    ├── config
-    │   └── minio.json (Tailscale Serve’s Configuration File)
-    └── state (Tailscale’s Persistent Directory)
+├── config
+│   └── minio.json (Tailscale Serve’s Configuration File)
+└── state (Tailscale’s Persistent Directory)
 Example Directory Structure
 Environment Variables
 Setting environment variables with export involves assigning values using
@@ -76,42 +70,42 @@ Here’s an example configuration that emphasizes Tailscale’s integration and 
 docker-compose.yaml
 version: '3.8'
 services:
-  minio-ts:
-    hostname: minio-ts
-    container_name: minio-ts
-    image: tailscale/tailscale:latest
-    environment:
-      - TS_AUTHKEY=${TS_AUTHKEY}?ephemeral=false
-      - TS_STATE_DIR=/var/lib/minio-ts
-      - TS_SERVE_CONFIG=/config/minio-serve-config.json
-      - TS_EXTRA_ARGS=--advertise-tags=tag:infra 
-    volumes:
-      - /dev/net/tun:/dev/net/tun
-      - ${PWD}/tailscale/state:/var/lib/tailscale
-      - ${PWD}/tailscale/config:config
-    cap_add:
-      - net_admin
-      - sys_module
-    restart: unless-stopped
+minio-ts:
+hostname: minio-ts
+container_name: minio-ts
+image: tailscale/tailscale:latest
+environment:
+- TS_AUTHKEY=${TS_AUTHKEY}?ephemeral=false
+- TS_STATE_DIR=/var/lib/minio-ts
+- TS_SERVE_CONFIG=/config/minio-serve-config.json
+- TS_EXTRA_ARGS=--advertise-tags=tag:infra
+volumes:
+- /dev/net/tun:/dev/net/tun
+- ${PWD}/tailscale/state:/var/lib/tailscale
+- ${PWD}/tailscale/config:config
+cap_add:
+- net_admin
+- sys_module
+restart: unless-stopped
 
-  minio:
-    image: minio/minio:latest
-    container_name: minio
-    environment:
-      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
-      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
-    command: server /data --address ":9000" --console-address ":9001"
-    volumes:
-      - ${PWD}/minio/data:/data
-    restart: unless-stopped
-    depends_on: minio-ts
-    network_mode: service:minio-ts
+minio:
+image: minio/minio:latest
+container_name: minio
+environment:
+- MINIO_ROOT_USER=${MINIO_ROOT_USER}
+- MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+command: server /data --address ":9000" --console-address ":9001"
+volumes:
+- ${PWD}/minio/data:/data
+restart: unless-stopped
+depends_on: minio-ts
+network_mode: service:minio-ts
 
 volumes:
-  minio-ts:
-    local
-  minio:
-    local
+minio-ts:
+local
+minio:
+local
 docker-compose.yaml
 Docker Compose “network_mode” Parameter
 By setting
@@ -173,23 +167,23 @@ TS_SERVE_CONFIG
 JSON file, which automates TLS certificate issuance for domains managed by Tailscale’s HTTPS proxying feature. This eliminates the need for traditional proxies like Nginx for SSL/TLS termination, streamlining secure communications setup.
 TS_SERVE_CONFIG
 {
-    "TCP": {
-        "443": {
-            "HTTPS": true
-        }
-    },
-    "Web": {
-        "minio.{TS_CERT_DOMAIN}:443": {
-            "Handlers": {
-                "/": {
-                    "Proxy": "http://127.0.0.1:9001"
-                }
-            }
-        }
-    },
-    "AllowFunnel": {
-        "minio.{TS_CERT_DOMAIN}:443": false
-    }
+"TCP": {
+"443": {
+"HTTPS": true
+}
+},
+"Web": {
+"minio.{TS_CERT_DOMAIN}:443": {
+"Handlers": {
+"/": {
+"Proxy": "http://127.0.0.1:9001"
+}
+}
+}
+},
+"AllowFunnel": {
+"minio.{TS_CERT_DOMAIN}:443": false
+}
 }
 Example TS_SERVE_CONFIG - JSON file
 The
@@ -260,8 +254,6 @@ Whether you're just starting your AI development journey or looking to optimize 
 For additional support or to connect with the community, feel free to join the conversation in the
 MinIO Slack
 channel, where experts share insights and answer questions about deploying, managing, and optimizing MinIO.
-Previous Post
-Next Post
 S3 Select
 Security
 Modern Data Lakes

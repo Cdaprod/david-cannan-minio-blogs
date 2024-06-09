@@ -1,21 +1,15 @@
 # Developing Langchain Agents with the MinIO SDK for LLM Tool-Use
 
+![Header Image](articles/images/Developing_Langchain_Agents_with_the_MinIO_SDK_for_LLM_Tool-Use.jpg)
+
 Developing Langchain Agents with the MinIO SDK for LLM Tool-Use
 David Cannan
 David Cannan
 on
 AI/ML
 20 February 2024
-Share:
-Linkedin
-X (Twitter)
-Reddit
-Copy Article Link
-Email Article
-Follow:
 LinkedIn
 X
-Reddit
 In my
 previous article
 on
@@ -123,9 +117,9 @@ from minio import Minio
 from minio.error import S3Error
 
 minio_client = Minio('play.min.io:443',
-                     access_key='minioadmin',
-                     secret_key='minioadmin',
-                     secure=True)
+access_key='minioadmin',
+secret_key='minioadmin',
+secure=True)
 Setting the
 minio_client
 In this example, we're using MinIO's play server (
@@ -140,15 +134,15 @@ Here's a simple yet effective helper function and code snippet for managing the 
 bucket_name = "test"
 
 try:
-    # Check if bucket exists
-    if not minio_client.bucket_exists(bucket_name):
-        # Create the bucket because it does not exist
-        minio_client.make_bucket(bucket_name)
-        print(f"Bucket '{bucket_name}' created successfully.")
-    else:
-        print(f"Bucket '{bucket_name}' already exists.")
+# Check if bucket exists
+if not minio_client.bucket_exists(bucket_name):
+# Create the bucket because it does not exist
+minio_client.make_bucket(bucket_name)
+print(f"Bucket '{bucket_name}' created successfully.")
+else:
+print(f"Bucket '{bucket_name}' already exists.")
 except S3Error as err:
-    print(f"Error encountered: {err}")
+print(f"Error encountered: {err}")
 Bucket helper function
 This code performs the following operations:
 1.
@@ -179,16 +173,16 @@ Once the environment is configured and the necessary checks are in place to ensu
 Here's how you can define this upload function:
 @tool
 def upload_file_to_minio(bucket_name: str, object_name: str, data_bytes: bytes):
-    """
-    Uploads a file to MinIO.
-    Parameters:
-        bucket_name (str): The name of the bucket.
-        object_name (str): The name of the object to create in the bucket.
-        data_bytes (bytes): The raw bytes of the file to upload.
-    """
-    data_stream = io.BytesIO(data_bytes)
-    minio_client.put_object(bucket_name, object_name, data_stream, length=len(data_bytes))
-    return f"File {object_name} uploaded successfully to bucket {bucket_name}."
+"""
+Uploads a file to MinIO.
+Parameters:
+bucket_name (str): The name of the bucket.
+object_name (str): The name of the object to create in the bucket.
+data_bytes (bytes): The raw bytes of the file to upload.
+"""
+data_stream = io.BytesIO(data_bytes)
+minio_client.put_object(bucket_name, object_name, data_stream, length=len(data_bytes))
+return f"File {object_name} uploaded successfully to bucket {bucket_name}."
 Python “upload” function with Langchain’s
 @tool
 decorator.
@@ -256,8 +250,8 @@ function is intended to showcase the process of adding more functionalities to y
 Here's a closer look at how this secondary tool is defined:
 @tool
 def get_word_length(word: str) -> int:
-    """Returns the length of a word."""
-    return len(word)
+"""Returns the length of a word."""
+return len(word)
 Python “secondary” function with Langchain’s
 @tool
 decorator
@@ -282,9 +276,9 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
 
 prompt = ChatPromptTemplate.from_messages([
-    ("system", "You are a powerful assistant equipped with file management capabilities."),
-    ("user", "{input}"),
-    MessagesPlaceholder(variable_name="agent_scratchpad"),
+("system", "You are a powerful assistant equipped with file management capabilities."),
+("user", "{input}"),
+MessagesPlaceholder(variable_name="agent_scratchpad"),
 ])
 Importing and defining
 prompt
@@ -360,10 +354,10 @@ from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
 prompt = ChatPromptTemplate.from_messages([
-    ("system", "You are a powerful assistant with memory capabilities."),
-    MessagesPlaceholder(variable_name="chat_history"),
-    ("user", "{input}"),
-    MessagesPlaceholder(variable_name="agent_scratchpad"),
+("system", "You are a powerful assistant with memory capabilities."),
+MessagesPlaceholder(variable_name="chat_history"),
+("user", "{input}"),
+MessagesPlaceholder(variable_name="agent_scratchpad"),
 ])
 
 chat_history = []
@@ -378,14 +372,14 @@ This adjustment enables our application to dynamically incorporate previous inte
 Refining the Agent with Contextual Awareness
 To fully leverage the benefits of memory management, we refine our agent's definition to incorporate chat history actively. This involves defining specific behaviors for handling inputs, managing the agent's scratchpad, and incorporating the chat history into the agent's decision-making process:
 agent = (
-    {
-        "input": lambda x: x["input"],
-        "agent_scratchpad": lambda x: format_to_openai_tool_messages(x["intermediate_steps"]),
-        "chat_history": lambda x: x["chat_history"],
-    }
-    | prompt
-    | llm_with_tools
-    | OpenAIToolsAgentOutputParser()
+{
+"input": lambda x: x["input"],
+"agent_scratchpad": lambda x: format_to_openai_tool_messages(x["intermediate_steps"]),
+"chat_history": lambda x: x["chat_history"],
+}
+| prompt
+| llm_with_tools
+| OpenAIToolsAgentOutputParser()
 )
 
 
@@ -411,9 +405,9 @@ First, we establish a user prompt that instructs the system on the desired actio
 input1 = "Upload a text object with some funny name to the 'test' bucket with some example content"
 
 file_info = {
-    "bucket_name": "",
-    "object_name": "",
-    "data_bytes": b""
+"bucket_name": "",
+"object_name": "",
+"data_bytes": b""
 }
 input1
 is where we define our user prompt as a string.
@@ -425,8 +419,8 @@ with the specified input, including the chat history to maintain conversational 
 result = agent_executor.invoke({"input": input1, "chat_history": chat_history, "file_info": file_info})
 
 chat_history.extend([
-    HumanMessage(content=input1),
-    AIMessage(content=result["output"]),
+HumanMessage(content=input1),
+AIMessage(content=result["output"]),
 ])
 Invoking our
 agent_executor
@@ -504,8 +498,6 @@ For those who’ve made it this far and are eager to dive into the practical imp
 here
 .
 Here’s to crafting the future, one innovative solution at a time!
-Previous Post
-Next Post
 S3 Select
 Security
 Modern Data Lakes

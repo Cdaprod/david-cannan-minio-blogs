@@ -1,21 +1,15 @@
 # The Future of Hybrid Cloud Pipelines: Integrating MinIO, Tailscale, and GitHub Actions
 
+![Header Image](articles/images/The_Future_of_Hybrid_Cloud_Pipelines__Integrating_MinIO__Tailscale__and_GitHub_Actions.jpg)
+
 The Future of Hybrid Cloud Pipelines: Integrating MinIO, Tailscale, and GitHub Actions
 David Cannan
 David Cannan
 on
 DevOps
 24 May 2024
-Share:
-Linkedin
-X (Twitter)
-Reddit
-Copy Article Link
-Email Article
-Follow:
 LinkedIn
 X
-Reddit
 Data processing is a fundamental practice in modern software development. It enables teams to automate the collection, processing, and storage of data, ensuring high-quality data and efficient handling.
 In this article, we will explore how to set up a comprehensive data processing pipeline that highlights the use of the
 Tailscale GitHub Action
@@ -107,20 +101,20 @@ Step 2: Enforcing Precise Access with Tailscale's ACLs
 Next up, we dive into configuring Access Control Lists (ACLs) in Tailscale. This is where we define and restrict how different parts of our network interact. By carefully crafting ACL rules, we ensure that our GitHub Actions runner has access only to the resources it needs, preventing any unauthorized access to sensitive areas of our network.
 Here's an example of an ACL configuration:
 {
- "groups": {
-    "group:dev": ["$github_user_email", "$admin_user_email",],
-  },
-  "acls": [
-    {
-      "action": "accept",
-      "src": ["tag:ci"],
-      "dst": ["tag:infra:*"]
-    }
-  ],
-  "tagOwners": {
-    "tag:ci": ["group:dev"],
-    "tag:infra": ["group:dev"]
-  }
+"groups": {
+"group:dev": ["$github_user_email", "$admin_user_email",],
+},
+"acls": [
+{
+"action": "accept",
+"src": ["tag:ci"],
+"dst": ["tag:infra:*"]
+}
+],
+"tagOwners": {
+"tag:ci": ["group:dev"],
+"tag:infra": ["group:dev"]
+}
 }
 Sample ACL JSON
 In this example, we define an ACL rule that allows traffic from devices tagged as "
@@ -151,12 +145,12 @@ TS_OAUTH_SECRET
 Enter the corresponding values for your Tailscale OAuth client ID and secret.
 You can then reference these secrets in your GitHub Actions workflow file, here’s an example of how to integrate Tailscale’s GitHub Action into your workflow:
 steps:
-  - name: Setup Tailscale
-    uses: tailscale/github-action@v2
-    with:
-      oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}  
-      oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
-      tags: tag:ci
+- name: Setup Tailscale
+uses: tailscale/github-action@v2
+with:
+oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+tags: tag:ci
 Example Tailscale Action step implementation
 In this example, we use the `tailscale/github-action` to set up Tailscale in our workflow. We provide the OAuth client ID and secret using the GitHub Secrets we created earlier. The `tags` parameter specifies the tag(s) assigned to the GitHub Actions runner, which determines its access level within the Tailscale network based on the ACL rules we defined.
 Step 4: Troubleshooting and Continuous Improvement
@@ -211,53 +205,53 @@ Our data processing workflow, defined in a YAML file, is triggered by push event
 name: Process and Log URL Data
 
 on:
-  push:
-    branches:
-      - main
-  schedule:
-    - cron: '0 0 * * *'  # Runs at midnight UTC every day
-  workflow_dispatch:
+push:
+branches:
+- main
+schedule:
+- cron: '0 0 * * *'  # Runs at midnight UTC every day
+workflow_dispatch:
 
 jobs:
-  hydrate-minio-weaviate:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+hydrate-minio-weaviate:
+runs-on: ubuntu-latest
+steps:
+- name: Checkout repository
+uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.8'
-      
-      - name: Install Python dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests minio weaviate-client pydantic unstructured python-dotenv
+- name: Set up Python
+uses: actions/setup-python@v2
+with:
+python-version: '3.8'
 
-      - name: Load environment variables
-        run: |
-          echo "MINIO_ACCESS_KEY=${{ secrets.MINIO_ACCESS_KEY }}" >> $GITHUB_ENV
-          echo "MINIO_SECRET_KEY=${{ secrets.MINIO_SECRET_KEY }}" >> $GITHUB_ENV
-          echo "WEAVIATE_ENDPOINT=${{ secrets.WEAVIATE_ENDPOINT }}" >> $GITHUB_ENV
+- name: Install Python dependencies
+run: |
+python -m pip install --upgrade pip
+pip install requests minio weaviate-client pydantic unstructured python-dotenv
 
-      - name: Setup Tailscale
-        uses: tailscale/github-action@v2
-        with:
-          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
-          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
-          tags: tag:ci
+- name: Load environment variables
+run: |
+echo "MINIO_ACCESS_KEY=${{ secrets.MINIO_ACCESS_KEY }}" >> $GITHUB_ENV
+echo "MINIO_SECRET_KEY=${{ secrets.MINIO_SECRET_KEY }}" >> $GITHUB_ENV
+echo "WEAVIATE_ENDPOINT=${{ secrets.WEAVIATE_ENDPOINT }}" >> $GITHUB_ENV
 
-      - name: Run Hydrate Script
-        run: |
-          python ./hydrate/hydrate.py ./hydrate/urls.txt cda-datasets process_log.txt
-        shell: bash
+- name: Setup Tailscale
+uses: tailscale/github-action@v2
+with:
+oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+tags: tag:ci
 
-      - name: Upload Process Log as Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: processed-urls-log
-          path: process_log.txt
+- name: Run Hydrate Script
+run: |
+python ./hydrate/hydrate.py ./hydrate/urls.txt cda-datasets process_log.txt
+shell: bash
+
+- name: Upload Process Log as Artifact
+uses: actions/upload-artifact@v2
+with:
+name: processed-urls-log
+path: process_log.txt
 Key Workflow Steps Explained:
 Checkout Repository:
 This step checks out the code from your GitHub repository, ensuring that the latest version is used in the workflow.
@@ -287,8 +281,6 @@ Integrating GitHub Actions with Tailscale and MinIO can significantly enhance th
 So, what are you waiting for? Start integrating GitHub Actions with MinIO and Tailscale today and experience the power of enhanced data processing pipelines firsthand. When you’re finished, swing over to the
 MinIO Slack
 to show off! Happy coding!
-Previous Post
-Next Post
 S3 Select
 Security
 Modern Data Lakes

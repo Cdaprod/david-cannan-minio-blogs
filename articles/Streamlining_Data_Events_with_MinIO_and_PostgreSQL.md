@@ -1,21 +1,15 @@
 # Streamlining Data Events with MinIO and PostgreSQL
 
+![Header Image](articles/images/Streamlining_Data_Events_with_MinIO_and_PostgreSQL.jpg)
+
 Streamlining Data Events with MinIO and PostgreSQL
 David Cannan
 David Cannan
 on
 Events
 16 January 2024
-Share:
-Linkedin
-X (Twitter)
-Reddit
-Copy Article Link
-Email Article
-Follow:
 LinkedIn
 X
-Reddit
 This tutorial will teach you how to  set up and manage data events, also referred to as bucket or object events, between MinIO and PostgreSQL using Docker and Docker Compose.
 You’re probably already leveraging MinIO events to communicate with external services,  and now you'll enhance your data handling capabilities by automating and streamlining data event management with PostgreSQL. This article is tailored for those with a basic understanding of MinIO, PostgreSQL, and Docker, offering a hands-on approach to deploying a cohesive environment where MinIO and PostgreSQL work in unison.
 Let’s dive into deploying these services with Docker Compose and explore the practical applications of publishing events from MinIO to PostreSQL.
@@ -55,35 +49,35 @@ We will begin by setting up MinIO and its environment along with a PostgreSQL da
 We will use the docker-compose YAML file below to deploy and start MinIO and PostgreSQL using Docker Compose.
 version: '3.8'
 services:
-  minio:
-    container_name: minio
-    image: minio/minio
-    environment:
-      MINIO_ACCESS_KEY: minio
-      MINIO_SECRET_KEY: minio123
-    command: server /data --console-address ":9001"
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-
-    volumes:
-      - minio_data:/data
-
-  postgres:
-    container_name: postgres
-    image: postgres:alpine
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+minio:
+container_name: minio
+image: minio/minio
+environment:
+MINIO_ACCESS_KEY: minio
+MINIO_SECRET_KEY: minio123
+command: server /data --console-address ":9001"
+ports:
+- "9000:9000"
+- "9001:9001"
 
 volumes:
-  minio_data:
-  postgres_data:
+- minio_data:/data
+
+postgres:
+container_name: postgres
+image: postgres:alpine
+environment:
+POSTGRES_DB: postgres
+POSTGRES_USER: myuser
+POSTGRES_PASSWORD: mypassword
+ports:
+- "5432:5432"
+volumes:
+- postgres_data:/var/lib/postgresql/data
+
+volumes:
+minio_data:
+postgres_data:
 This docker-compose structure outlines two services and their respective configuration variables, as well as persistent volumes and network port forwarding for each.
 When configuring the PostgreSQL connection in MinIO, include the user and password in the connection string. For instance, your connection string in the MinIO configuration might look like:
 connection_string="user=myuser password=mypassword host=postgres dbname=postgres port=5432 sslmode=disable"
@@ -227,8 +221,6 @@ mc
 CLI, MinIO ensures that your data management strategies are not only efficient but also seamlessly integrated with modern database solutions like PostgreSQL.
 As you continue to explore the capabilities of MinIO, remember that the system’s flexibility is designed to cater to a wide range of use cases and scenarios. For those looking to delve deeper into technicalities or explore more advanced configurations, the MinIO documentation on Bucket Notifications and Monitoring Bucket and Object Events is an invaluable resource. Embrace the power of MinIO and PostgreSQL to enhance your cloud storage solutions and data management practices.
 Best of luck implementing these strategies in your projects, and remember, the team at MinIO is always here to support your journey in data event management!
-Previous Post
-Next Post
 S3 Select
 Security
 Modern Data Lakes

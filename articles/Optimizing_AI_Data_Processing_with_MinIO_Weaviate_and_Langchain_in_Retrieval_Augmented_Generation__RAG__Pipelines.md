@@ -1,21 +1,15 @@
 # Optimizing AI Data Processing with MinIO Weaviate and Langchain in Retrieval Augmented Generation (RAG) Pipelines
 
+![Header Image](articles/images/Optimizing_AI_Data_Processing_with_MinIO_Weaviate_and_Langchain_in_Retrieval_Augmented_Generation__RAG__Pipelines.jpg)
+
 Optimizing AI Data Processing with MinIO Weaviate and Langchain in Retrieval Augmented Generation (RAG) Pipelines
 David Cannan
 David Cannan
 on
 AI/ML
 29 April 2024
-Share:
-Linkedin
-X (Twitter)
-Reddit
-Copy Article Link
-Email Article
-Follow:
 LinkedIn
 X
-Reddit
 As a developer focused on AI integration at MinIO, I am constantly exploring how our tools can be seamlessly integrated into modern AI architectures to enhance efficiency and scalability. In this article, we will delve into the integration of MinIO with Retrieval-Augmented Generation (RAG) pipelines and Weaviate vector storage, using LangChain. Our goal is to create a robust data handling framework that not only improves workflow efficiencies but also manages the complete data lifecycle effectively.
 An Introduction to RAG
 Retrieval Augmented Generation (
@@ -111,11 +105,11 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 
 if os.environ.get("WEAVIATE_API_KEY", None) is None:
-   raise Exception("Missing `WEAVIATE_API_KEY` environment variable.")
+raise Exception("Missing `WEAVIATE_API_KEY` environment variable.")
 
 
 if os.environ.get("WEAVIATE_ENVIRONMENT", None) is None:
-   raise Exception("Missing `WEAVIATE_ENVIRONMENT` environment variable.")
+raise Exception("Missing `WEAVIATE_ENVIRONMENT` environment variable.")
 
 
 WEAVIATE_INDEX_NAME = os.environ.get("WEAVIATE_INDEX", "langchain-test")
@@ -148,15 +142,15 @@ prompt = ChatPromptTemplate.from_template(template)
 ### RAG pipeline
 model = ChatOpenAI()
 chain = (
-    RunnableParallel({"context": retriever, "question": RunnablePassthrough()})
-    | prompt
-    | model
-    | StrOutputParser()
+RunnableParallel({"context": retriever, "question": RunnablePassthrough()})
+| prompt
+| model
+| StrOutputParser()
 )
 
 # Add typing for input
 class Question(BaseModel):
-    __root__: str
+__root__: str
 
 chain = chain.with_types(input_type=Question)
 Original LangChain Weaviate RAG Script
@@ -170,10 +164,10 @@ from minio import Minio
 
 # Initialize the MinIO client with appropriate access credentials
 minio_client = Minio(
-    "play.min.io:443",
-    access_key="minioadmin",
-    secret_key="minioadmin",
-    secure=True
+"play.min.io:443",
+access_key="minioadmin",
+secret_key="minioadmin",
+secure=True
 )
 Connecting to play.min.io:443 server via minio_client
 Modifying Data Ingestion
@@ -184,10 +178,10 @@ from io import BytesIO
 
 # Define a function to fetch data directly from a MinIO bucket
 def fetch_data_from_s3(bucket_name, object_name):
-    response = minio_client.get_object(bucket_name, object_name)
-    data = BytesIO(response.read())
-    response.close()
-    return data.getvalue().decode('utf-8')
+response = minio_client.get_object(bucket_name, object_name)
+data = BytesIO(response.read())
+response.close()
+return data.getvalue().decode('utf-8')
 
 
 # Example usage
@@ -210,12 +204,12 @@ all_splits = text_splitter.split_documents(data)
 
 # Store the processed data splits back into MinIO for easy retrieval and further use
 def store_data_in_s3(bucket_name, object_name, content):
-    content_bytes = content.encode('utf-8')
-    minio_client.put_object(bucket_name, object_name, BytesIO(content_bytes), len(content_bytes))
+content_bytes = content.encode('utf-8')
+minio_client.put_object(bucket_name, object_name, BytesIO(content_bytes), len(content_bytes))
 
 # Example of storing each split in MinIO
 for index, split in enumerate(all_splits):
-    store_data_in_s3("clean-bucket", f"split_{index}.txt", split)
+store_data_in_s3("clean-bucket", f"split_{index}.txt", split)
 Saving-splits snippet
 For further demonstration of saving-splits with MinIO Python SDK, see notebook in blog-assets repository
 here
@@ -228,31 +222,31 @@ from MinIO, which are essential for directing the AI model's response generation
 # Function to retreive rag-prompt.txt from prompt-bucket
 
 def get_prompt_from_minio(client, bucket_name, object_name):
-    """
-    Retrieve a text file from a specified MinIO bucket and return its content as a string.
-    :param client: Minio client instance
-    :param bucket_name: Name of the MinIO bucket
-    :param object_name: Object name in the bucket (e.g., 'rag-prompt.txt')
-    :return: Content of the prompt as a string
-    """
-    try:
-        # Get object data from the specified bucket
-        response = client.get_object(bucket_name, object_name)
-        data = response.read()  # Read data from the response
-        prompt_content = data.decode('utf-8')  # Decode bytes to string
-        return prompt_content
-    except Exception as e:
-        print(f"Failed to retrieve prompt: {e}")
-        return None
+"""
+Retrieve a text file from a specified MinIO bucket and return its content as a string.
+:param client: Minio client instance
+:param bucket_name: Name of the MinIO bucket
+:param object_name: Object name in the bucket (e.g., 'rag-prompt.txt')
+:return: Content of the prompt as a string
+"""
+try:
+# Get object data from the specified bucket
+response = client.get_object(bucket_name, object_name)
+data = response.read()  # Read data from the response
+prompt_content = data.decode('utf-8')  # Decode bytes to string
+return prompt_content
+except Exception as e:
+print(f"Failed to retrieve prompt: {e}")
+return None
 
 
 # Usage
 prompt = get_prompt_from_minio(minio_client, "prompt-bucket", "rag-prompt.txt")
 
 if prompt:
-    print(f"Retrieved prompt content: {prompt}")
+print(f"Retrieved prompt content: {prompt}")
 else:
-    print("No content retrieved.")
+print("No content retrieved.")
 Prompt-retrieval snippet
 For further demonstration of prompt-retrieval with MinIO Python SDK, see notebook in blog-assets repository
 here
@@ -266,9 +260,9 @@ from langchain.chains import RetrievalQA
 
 # Setup the RetrievalQA chain with the language model and the vector store retriever
 qa_chain = RetrievalQA.from_chain_type(
-    llm,
-    retriever=vectorstore.as_retriever(),
-    chain_type_kwargs={"prompt": prompt}
+llm,
+retriever=vectorstore.as_retriever(),
+chain_type_kwargs={"prompt": prompt}
 )
 
 
@@ -321,8 +315,6 @@ The integration’s impact extends beyond current enhancements, opening up new a
 For those keen to dive deeper into the burgeoning world of RAG technologies and their applications, engage with us on
 MinIO Slack Channel
 so that we can foster a collaborative environment for exploration and growth. The journey ahead is poised to unlock new capabilities in AI, powered by the continuous refinement and integration of cutting-edge technologies.
-Previous Post
-Next Post
 S3 Select
 Security
 Modern Data Lakes

@@ -1,21 +1,15 @@
 # Building and Deploying a MinIO-Powered LangChain Agent API with LangServe
 
+![Header Image](articles/images/Building_and_Deploying_a_MinIO-Powered_LangChain_Agent_API_with_LangServe.jpg)
+
 Building and Deploying a MinIO-Powered LangChain Agent API with LangServe
 David Cannan
 David Cannan
 on
 AI/ML
 9 April 2024
-Share:
-Linkedin
-X (Twitter)
-Reddit
-Copy Article Link
-Email Article
-Follow:
 LinkedIn
 X
-Reddit
 Our journey through the innovative world of LangChain has unveiled its substantial capabilities in transforming data management and application functionality.
 Through previous discussions, we delved into several topics while exploring the intricate capabilities of LangChain. In this article, we will build upon the concepts covered in "Empowering Langchain Agents with MinIO" as we expand the functionality of a MinIO agent to encapsulate additional abilities and deploy the custom agent via LangServe.
 Innovating S3 Bucket Retrieval with LangChain
@@ -139,13 +133,13 @@ from langchain_openai import ChatOpenAI
 os.environ["OPENAI_API_KEY"] = "<<Your API Key Here>>"
 
 # Initialize llm
-llm = ChatOpenAI(api_key=os.environ["OPENAI_API_KEY"]) 
+llm = ChatOpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
 # Initialize MinIO client
 minio_client = Minio('play.min.io:443',
-                     access_key='minioadmin',
-                     secret_key='minioadmin',
-                     secure=True)
+access_key='minioadmin',
+secret_key='minioadmin',
+secure=True)
 In this code snippet, we import the required packages and initialize the ChatOpenAI language model with the OpenAI API key stored in the
 OPENAI_API_KEY
 environment variable. We also initialize the minio_client by providing the necessary connection details to the "play.min.io" public server.
@@ -155,15 +149,15 @@ bucket_name = "test"
 
 
 try:
-    # Check if bucket exists
-    if not minio_client.bucket_exists(bucket_name):
-        # Create the bucket because it does not exist
-        minio_client.make_bucket(bucket_name)
-        print(f"Bucket '{bucket_name}' created successfully.")
-    else:
-        print(f"Bucket '{bucket_name}' already exists.")
+# Check if bucket exists
+if not minio_client.bucket_exists(bucket_name):
+# Create the bucket because it does not exist
+minio_client.make_bucket(bucket_name)
+print(f"Bucket '{bucket_name}' created successfully.")
+else:
+print(f"Bucket '{bucket_name}' already exists.")
 except S3Error as err:
-    print(f"Error encountered: {err}")
+print(f"Error encountered: {err}")
 Here, we define the
 bucket_name
 as "test" and check if it already exists using the
@@ -183,17 +177,17 @@ from langchain.agents import tool
 
 @tool
 def upload_file_to_minio(bucket_name: str, object_name: str, data_bytes: bytes):
-    """
-    Uploads a file to MinIO.
-    
-    Parameters:
-        bucket_name (str): The name of the bucket.
-        object_name (str): The name of the object to create in the bucket.
-        data_bytes (bytes): The raw bytes of the file to upload.
-    """
-    data_stream = io.BytesIO(data_bytes)
-    minio_client.put_object(bucket_name, object_name, data_stream, length=len(data_bytes))
-    return f"File {object_name} uploaded successfully to bucket {bucket_name}."
+"""
+Uploads a file to MinIO.
+
+Parameters:
+bucket_name (str): The name of the bucket.
+object_name (str): The name of the object to create in the bucket.
+data_bytes (bytes): The raw bytes of the file to upload.
+"""
+data_stream = io.BytesIO(data_bytes)
+minio_client.put_object(bucket_name, object_name, data_stream, length=len(data_bytes))
+return f"File {object_name} uploaded successfully to bucket {bucket_name}."
 The
 upload_file_to_minio
 function is decorated with
@@ -203,16 +197,16 @@ minio_client
 to perform the file upload operation and returns a success message upon completion.
 @tool
 def download_file_from_minio(file_info):
-    """
-    Custom function to download a file from MinIO.
-    
-    Expects file_info dict with 'bucket_name', 'object_name', and 'save_path' keys.
-    'save_path' should be the local path where the file will be saved.
-    """
-    bucket_name = file_info['bucket_name']
-    object_name = file_info['object_name']
-    save_path = file_info['save_path']
-    minio_client.get_object(bucket_name, object_name, save_path)
+"""
+Custom function to download a file from MinIO.
+
+Expects file_info dict with 'bucket_name', 'object_name', and 'save_path' keys.
+'save_path' should be the local path where the file will be saved.
+"""
+bucket_name = file_info['bucket_name']
+object_name = file_info['object_name']
+save_path = file_info['save_path']
+minio_client.get_object(bucket_name, object_name, save_path)
 Similarly, the
 download_file_from_minio
 function is also marked with
@@ -224,15 +218,15 @@ minio_client
 to retrieve the object from the specified bucket and save it to the designated local path.
 @tool
 def list_objects_in_minio_bucket(file_info):
-    """
-    Custom function to list objects in a MinIO bucket.
-    
-    Expects file_info dict with 'bucket_name' key.
-    Returns a list of dictionaries containing 'ObjectKey' and 'Size' keys.
-    """
-    bucket_name = file_info['bucket_name']
-    response = minio_client.list_objects(bucket_name)
-    return [{'ObjectKey': obj.object_name, 'Size': obj.size} for obj in response.items]
+"""
+Custom function to list objects in a MinIO bucket.
+
+Expects file_info dict with 'bucket_name' key.
+Returns a list of dictionaries containing 'ObjectKey' and 'Size' keys.
+"""
+bucket_name = file_info['bucket_name']
+response = minio_client.list_objects(bucket_name)
+return [{'ObjectKey': obj.object_name, 'Size': obj.size} for obj in response.items]
 The
 list_objects_in_minio_bucket
 function, also decorated with
@@ -295,9 +289,9 @@ from langchain_core.messages import AIMessage, HumanMessage
 
 
 prompt_template = ChatPromptTemplate.from_messages([
-    ("system", "You are a powerful assistant equipped with file management capabilities."),
-    ("user", "{input}"),
-    MessagesPlaceholder(variable_name="agent_scratchpad"),
+("system", "You are a powerful assistant equipped with file management capabilities."),
+("user", "{input}"),
+MessagesPlaceholder(variable_name="agent_scratchpad"),
 ])
 The prompt consists of three messages:
 A "system" message setting the context for the AI agent as a powerful assistant with file management capabilities.
@@ -326,13 +320,13 @@ add_route
 function from the LangServe library.
 We instantiate the necessary components and chain them together to create a single agent variable.
 agent = (
-    {
-        "input": lambda x: x["input"],
-        "agent_scratchpad": lambda x: format_to_openai_tool_messages(x["intermediate_steps"]),
-    }
-    | prompt_template
-    | llm_with_tools
-    | OpenAIToolsAgentOutputParser()
+{
+"input": lambda x: x["input"],
+"agent_scratchpad": lambda x: format_to_openai_tool_messages(x["intermediate_steps"]),
+}
+| prompt_template
+| llm_with_tools
+| OpenAIToolsAgentOutputParser()
 )
 The agent is defined using a combination of dictionaries and chained operations. The input key extracts the user input from the incoming data, while the
 agent_scratchpad
@@ -372,9 +366,9 @@ from fastapi import FastAPI
 
 
 app = FastAPI(
-    title="MinIO Agent API",
-    version="1.0",
-    description="A conversational agent facilitating data storage and retrieval with MinIO",
+title="MinIO Agent API",
+version="1.0",
+description="A conversational agent facilitating data storage and retrieval with MinIO",
 )
 For setting CORS headers we can add the following lines to enhance our security:
 from fastapi.middleware.cors import CORSMiddleware
@@ -382,12 +376,12 @@ from fastapi.middleware.cors import CORSMiddleware
 
 # Set all CORS enabled origins
 app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-    expose_headers=["*"],
+CORSMiddleware,
+allow_origins=["*"],
+allow_credentials=True,
+allow_methods=["*"],
+allow_headers=["*"],
+expose_headers=["*"],
 )
 Implementing the Agent using LangServe
 Now that we have finished with the
@@ -402,10 +396,10 @@ from langserve import add_routes
 
 
 add_routes(
-   app,
-   agent_executor.with_types(input_type=Input, output_type=Output).with_config(
-       {"run_name": "agent"}
-   ), path=”/invoke”
+app,
+agent_executor.with_types(input_type=Input, output_type=Output).with_config(
+{"run_name": "agent"}
+), path=”/invoke”
 )
 By calling
 add_route(app, agent_executor(…), path="/invoke")
@@ -422,8 +416,8 @@ With this setup, the server can handle incoming requests, pass them to the agent
 Launching the LangServe Application via Uvicorn
 To kickstart the LangServe application, we employ Uvicorn as the ASGI server, setting the stage for our app to run. This snippet of code is pivotal as it activates the server, specifying the universal host and the designated port for the application’s access points.
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+import uvicorn
+uvicorn.run(app, host="0.0.0.0", port=8000)
 By embedding this block within the application’s main entry, we ensure that Uvicorn takes the helm when the script is executed directly, thereby lighting up our FastAPI application on a predefined host and port. This approach not only simplifies the deployment process but also marks a clear entry for running the application in a development or production environment.
 Starting the Server Application
 The above code has been demonstrated a modular approach which includes using the “langchain-cli” library, creating a new langchain app, and saving the chain logic to
@@ -468,8 +462,6 @@ plays a pivotal role in deploying these advanced solutions. As we continue to na
 At MinIO, we’re energized by the creativity and potential within the developer community during this tech-rich era. There’s no better time for collaboration and knowledge exchange. We’re eager to connect with you! Join us on our
 MinIO Slack
 channel to continue the conversation and reach new heights together.
-Previous Post
-Next Post
 S3 Select
 Security
 Modern Data Lakes

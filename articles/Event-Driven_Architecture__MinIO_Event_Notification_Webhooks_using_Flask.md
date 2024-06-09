@@ -1,21 +1,15 @@
 # Event-Driven Architecture: MinIO Event Notification Webhooks using Flask
 
+![Header Image](articles/images/Event-Driven_Architecture__MinIO_Event_Notification_Webhooks_using_Flask.jpg)
+
 Event-Driven Architecture: MinIO Event Notification Webhooks using Flask
 David Cannan
 David Cannan
 on
 Events
 23 January 2024
-Share:
-Linkedin
-X (Twitter)
-Reddit
-Copy Article Link
-Email Article
-Follow:
 LinkedIn
 X
-Reddit
 Event notifications in MinIO may not seem thrilling at first, but once you harness their power, they illuminate the dynamics within your storage buckets. Event notifications are critical components of a full-fledged, efficient object storage system. Webhooks are my personal
 favorite tool for integrating with MinIO
 . They are like a Swiss Army knife in the world of events, offering a universal solution to various challenges.
@@ -172,51 +166,51 @@ Expect:
 The Structure of the Event Notification Data Received by Flask
 Depending on the services or integration you are building, you may need to identify the event_data from your Flask app, and this requires a good understanding of the data your event provides.
 {
-  "s3": {
-    "bucket": {
-      "arn": "arn:aws:s3:::mybucket",
-      "name": "mybucket",
-      "ownerIdentity": {
-        "principalId": "minio"
-      }
-    },
-    "object": {
-      "key": "cmd.md",
-      "eTag": "d8e8fca2dc0f896fd7cb4cb0031ba249",
-      "size": 5,
-      "sequencer": "17A9AB4FA93B35D8",
-      "contentType": "text/markdown",
-      "userMetadata": {
-        "content-type": "text/markdown"
-      }
-    },
-    "configurationId": "Config",
-    "s3SchemaVersion": "1.0"
-  },
-  "source": {
-    "host": "127.0.0.1",
-    "port": "",
-    "userAgent": "MinIO (linux; arm64) minio-go/v7.0.66 mc/RELEASE.2024-01-11T05-49-32Z"
-  },
-  "awsRegion": "",
-  "eventName": "s3:ObjectCreated:Put",
-  "eventTime": "2024-01-12T17:58:12.569Z",
-  "eventSource": "minio:s3",
-  "eventVersion": "2.0",
-  "userIdentity": {
-    "principalId": "minio"
-  },
-  "responseElements": {
-    "x-amz-id-2": "dd9025bab4ad464b049177c95eb6ebf374d3b3fd1af9251148b658df7ac2e3e8",
-    "x-amz-request-id": "17A9AB4FA9328C8F",
-    "x-minio-deployment-id": "c3642fb7-ab2a-44a0-96cb-246bf4d18e84",
-    "x-minio-origin-endpoint": "http://172.18.0.3:9000"
-  },
-  "requestParameters": {
-    "region": "",
-    "principalId": "minio",
-    "sourceIPAddress": "127.0.0.1"
-  }
+"s3": {
+"bucket": {
+"arn": "arn:aws:s3:::mybucket",
+"name": "mybucket",
+"ownerIdentity": {
+"principalId": "minio"
+}
+},
+"object": {
+"key": "cmd.md",
+"eTag": "d8e8fca2dc0f896fd7cb4cb0031ba249",
+"size": 5,
+"sequencer": "17A9AB4FA93B35D8",
+"contentType": "text/markdown",
+"userMetadata": {
+"content-type": "text/markdown"
+}
+},
+"configurationId": "Config",
+"s3SchemaVersion": "1.0"
+},
+"source": {
+"host": "127.0.0.1",
+"port": "",
+"userAgent": "MinIO (linux; arm64) minio-go/v7.0.66 mc/RELEASE.2024-01-11T05-49-32Z"
+},
+"awsRegion": "",
+"eventName": "s3:ObjectCreated:Put",
+"eventTime": "2024-01-12T17:58:12.569Z",
+"eventSource": "minio:s3",
+"eventVersion": "2.0",
+"userIdentity": {
+"principalId": "minio"
+},
+"responseElements": {
+"x-amz-id-2": "dd9025bab4ad464b049177c95eb6ebf374d3b3fd1af9251148b658df7ac2e3e8",
+"x-amz-request-id": "17A9AB4FA9328C8F",
+"x-minio-deployment-id": "c3642fb7-ab2a-44a0-96cb-246bf4d18e84",
+"x-minio-origin-endpoint": "http://172.18.0.3:9000"
+},
+"requestParameters": {
+"region": "",
+"principalId": "minio",
+"sourceIPAddress": "127.0.0.1"
+}
 }
 By following these steps, you can effectively utilize MinIO event notifications, significantly automating data workflow processes. For more detailed guidance and information, please refer to the MinIO documentation on
 Bucket Notifications
@@ -249,9 +243,9 @@ app = Flask(__name__)
 
 @app.route('/minio-event', methods=['POST'])
 def handle_minio_event():
-    event_data = request.json
-    app.logger.info(f"Received MinIO event: {event_data}")
-    return jsonify(event_data), 200
+event_data = request.json
+app.logger.info(f"Received MinIO event: {event_data}")
+return jsonify(event_data), 200
 The
 handle_minio_event
 function in the Flask app processes POST requests containing MinIO event data, and returns the
@@ -263,8 +257,6 @@ This blog post used MinIO and Python in a Docker environment to demonstrate the 
 The use of Docker, with its containerization technology, stands out for enabling components like MinIO and Flask to work independently yet cohesively. Of course, this containerized cloud-native setup minimizes conflicts and dependencies, highlighting Docker and Docker containers significance in modern software architecture.
 In conclusion of our exploration of MinIO webhook event notifications, I am convinced that the synergy of a dynamic programming language and MinIO’s formidable strength presents an unparalleled toolkit. This pairing paves the way for boundless opportunities in application development. It empowers us to not only innovate and streamline but also to expand our capabilities with remarkable efficiency and adaptability.
 This guide has demonstrated the simplicity and efficacy of API development using Python, laying a solid foundation for ongoing innovation and meeting ever-changing demands. It underscores the adaptability that is essential for the continued advancement in both data management and the evolution of application development. This approach is not just a methodology; it’s a pathway to future-proofing our technological endeavors.
-Previous Post
-Next Post
 S3 Select
 Security
 Modern Data Lakes
