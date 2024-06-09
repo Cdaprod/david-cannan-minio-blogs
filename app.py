@@ -46,13 +46,12 @@ def download_image(image_url, save_path):
     return None
 
 def clean_article_content(content):
-    # Split content by lines
     lines = content.split('\n')
     cleaned_lines = []
     skip_lines = [
-        'Share:', 'Follow:', 'Previous Post', 'Next Post', 'LinkedIn',
-        'X (Twitter)', 'Reddit', 'Copy Article Link', 'Email Article',
-        'MinIO Slack', 'Best Practices', 'Get Started with MinIO', 'Advanced Topics'
+        'Share:', 'Follow:', 'Previous Post', 'Next Post', 'LinkedIn', 'X (Twitter)', 'Reddit',
+        'Copy Article Link', 'Email Article', 'MinIO Slack', 'Best Practices', 'Get Started with MinIO',
+        'Advanced Topics'
     ]
     add_line = True
 
@@ -60,7 +59,10 @@ def clean_article_content(content):
         # Skip lines that contain any of the skip keywords
         if any(skip in line for skip in skip_lines):
             add_line = False
-        # If an empty line is encountered, start adding lines again
+        if 'on' in line and 'David Cannan' in line:
+            add_line = False
+        if re.match(r'^.*\d{1,2} \w+ \d{4}.*$', line):
+            add_line = False
         if not line.strip():
             add_line = True
         # Add cleaned lines
