@@ -104,7 +104,7 @@ def update_readme_and_articles(articles_df):
                 image_url = urljoin(absolute_url, row['image_url'])
                 image_path = f"articles/images/{sanitize_title(row['title'])}.jpg"
                 download_image(image_url, image_path)
-                cleaned_content = f"![Header Image]({image_path})\n\n{cleaned_content}"
+                cleaned_content = f"![Header Image](/{image_path})\n\n{cleaned_content}"
 
             with open(filename, 'w') as article_file:
                 article_file.write(f"# {row['title']}\n\n{cleaned_content}\n")
