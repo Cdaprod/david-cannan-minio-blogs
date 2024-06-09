@@ -51,22 +51,21 @@ def clean_article_content(article):
         return "Content not found"
     
     # Extract and clean the content
-    paragraphs = content_section.find_all(['p', 'h2', 'h3', 'ul', 'ol', 'pre', 'blockquote'])
+    elements = content_section.find_all(['p', 'h1', 'h2', 'h3', 'ul', 'ol', 'pre', 'blockquote'])
     cleaned_lines = []
     
-    for paragraph in paragraphs:
-        # Skip unwanted tags and content
-        if paragraph.name in ['ul', 'ol']:
-            items = [f"* {li.get_text(strip=True)}" for li in paragraph.find_all('li')]
+    for element in elements:
+        if element.name in ['ul', 'ol']:
+            items = [f"* {li.get_text(strip=True)}" for li in element.find_all('li')]
             cleaned_lines.extend(items)
-        elif paragraph.name == 'pre':
-            code = paragraph.get_text(strip=True)
+        elif element.name == 'pre':
+            code = element.get_text(strip=True)
             cleaned_lines.append(f"```\n{code}\n```")
-        elif paragraph.name == 'blockquote':
-            quote = paragraph.get_text(strip=True)
+        elif element.name == 'blockquote':
+            quote = element.get_text(strip=True)
             cleaned_lines.append(f"> {quote}")
         else:
-            cleaned_lines.append(paragraph.get_text(strip=True))
+            cleaned_lines.append(element.get_text(strip=True))
     
     return '\n\n'.join(cleaned_lines).strip()
 
@@ -115,7 +114,7 @@ def update_readme_and_articles(articles_df):
                 image_url = urljoin(absolute_url, row['image_url'])
                 image_path = f"articles/images/{sanitize_title(row['title'])}.jpg"
                 download_image(image_url, image_path)
-                article_content = f"![Header Image](/{image_path})\n\n{article_content}"
+                article_content = f"![Header Image]({image_path})\n\n{article_content}"
 
             with open(filename, 'w') as article_file:
                 article_file.write(f"# {row['title']}\n\n{article_content}\n")
