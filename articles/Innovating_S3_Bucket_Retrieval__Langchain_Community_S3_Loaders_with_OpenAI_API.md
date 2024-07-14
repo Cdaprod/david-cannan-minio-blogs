@@ -236,3 +236,6 @@ Equinix
 Certifications
 Snowflake
 Repatriation
+Migration
+Tabular
+Databricks
