@@ -219,7 +219,7 @@ Retrieve the necessary
 RAG prompts
 from MinIO, which are essential for directing the AI model's response generation in the RAG pipeline.
 # Fetch the RAG prompt stored in a MinIO bucket
-# Function to retreive rag-prompt.txt from prompt-bucket
+# Function to retrieve rag-prompt.txt from prompt-bucket
 
 def get_prompt_from_minio(client, bucket_name, object_name):
 """
